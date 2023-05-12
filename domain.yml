@@ -144,10 +144,13 @@ responses:
           payload: "/mood_sad"
 
   utter_greet_fr:
-    - text: "Bonjour ! Comment puis-je vous aider ?"
+    - text: "Salut ! Comment allez-vous ?"
 
   utter_thank:
     - text: "You're welcome!."
+  
+  utter_thank_fr:
+    - text: "De rien !"
 
   utter_started:
     - condition:
@@ -167,24 +170,51 @@ responses:
 
   utter_ask_for_something:
     - text: "How can we help you?"
+    
+  utter_ask_for_something_fr:
+    - text: "Est-ce que cela vous a aidé ?"
+
   utter_cheer_up:
     - text: "Here is something to cheer you up:"
+      image: "https://i.imgur.com/nGF1K8f.jpg"
+  
+  utter_cheer_up_fr:
+    - text: "Voici quelque chose pour vous remonter le moral :"
       image: "https://i.imgur.com/nGF1K8f.jpg"
 
   utter_did_that_help:
     - text: "Did that help you?"
+  
+  utter_did_that_help_fr:
+    - text: "Est-ce que cela vous a aidé ?"
 
   utter_happy:
     - text: "Great, carry on!"
+  
+  utter_happy:
+    - text: "Super, continue alors.!"
 
   utter_goodbye:
     - text: "Bye"
 
   utter_iamabot:
     - text: "I am a bot, powered by Rasa."
+ 
+  utter_iamabot_fr:
+    - text: "Je suis un bot alimenté par Rasa."
 
   utter_ask_type_ticket:
     - text: "What type of ticket would you like to create?"
+      buttons:
+        - title: "Incident"
+          payload: '/inform{{"ticket_type":"incident"}}'
+        - title: "Demand of service"
+          payload: '/inform{{"ticket_type":"demande de service"}}'
+        - title: "Demand of change"
+          payload: '/inform{{"ticket_type":"demande de change"}}'
+  
+  utter_ask_type_ticket_fr:
+    - text: "Quel type de ticket voulez-vous créer "
       buttons:
         - title: "Incident"
           payload: '/inform{{"ticket_type":"incident"}}'
@@ -195,13 +225,23 @@ responses:
 
   utter_type_ticket_confirmed:
     - text: "Your '{ticket_type}' is ready to be created ! "
+  
+  utter_type_ticket_confirmed_fr:
+    - text: "Votre '{ticket_type}' est prêt à être créé !"
 
   utter_habilitation_client:
     - text: "Here is a table that demonstrate the client's habilitaton on EasyVista:"
       image: "ressources/habilitationsClientEV.png"
 
+  utter_habilitation_client_fr:
+    - text: "Voici un tableau qui montre l'habilitation du client sur EasyVista :"
+      image: "ressources/habilitationsClientEV.png"
+
   utter_ask_ticket_title:
     - text: "what's your '{ticket_type}'s title ?"
+  
+  utter_ask_ticket_title_fr:
+    - text: "Quel est le titre de votre '{ticket_type}' ?"
 
   utter_ask_ticket_description:
     - text: "what's your '{ticket_type}'s description ?"
@@ -243,6 +283,7 @@ responses:
 
   utter_next_step:
     - text: "Great, now can u set an emergency level for your {ticket_type}'s {ticket_title}"
+  
   ###################incident steps#################""
   utter_steps_creating_incident:
     - text: "To create an incident on EasyVista you need to:"
@@ -325,12 +366,98 @@ responses:
     - text: "**! You can find your 'demande de change' in your 'My Space / Tickets / Demande de changement' menu"
       image: "ressources/cstep3.png"
   ################################################
+###########Français########incident####################################
 
+  utter_steps_creating_incident:
+    - text: "Pour créer un incident sur EasyVista, vous devez :"
+  utter_step_creating_i_1:
+    - text: "**1- Cliquer sur Nouveau ticket"
+      image: "ressources/step1.png"
+  utter_step_creating_i_2:
+    - text: "**2- Déclarer le type d'incident"
+      image: "ressources/step2.png"
+  utter_step_creating_i_3:
+    - text: "**3- Choisir parmi les types d'incidents auxquels votre contrat vous donne accès"
+      image: "ressources/step3.png"
+  utter_step_creating_i_4:
+    - text: "**4- Cliquer sur 'Demande' pour déclencher sa création"
+  utter_step_creating_i_5:
+    - text: "**5- Compléter un questionnaire pour décrire votre incident, qui permettra au Sopra Service Desk Banking d'avoir les informations nécessaires pour travailler sur votre ticket"
+      image: "ressources/step4.png"
+  utter_step_creating_i_6:
+    - text: "**! Les champs obligatoires sont marqués d'un « * »."
+  utter_step_creating_i_7:
+    - text: "**! Vous pouvez joindre une pièce jointe à votre ticket (30 Mo maximum)"
+  utter_step_creating_i_8:
+    - text: "**! Si vous avez plusieurs pièces jointes à joindre, utilisez un fichier zip où vous attacherez les autres documents ultérieurement, une fois que l'incident a été créé"
+  utter_step_creating_i_9:
+    - text: "**6- Une fois le questionnaire complété, cliquez sur 'OK', votre incident est créé et les équipes de support sont informées"
+  utter_step_creating_i_10:
+    - text: "**! Vous pouvez trouver votre incident dans votre menu 'Mon espace / Tickets / Incidents'"
+      image: "ressources/step5.png"
+  ################service fr################################
+  utter_steps_creating_demande_de_service:
+    - text: "Pour créer une 'demande de service' sur EasyVista, vous devez :"
+  utter_step_creating_s_1:
+    - text: "**1- Cliquer sur Nouveau ticket"
+      image: "ressources/step1.png"
+  utter_step_creating_s_2:
+    - text: "**2- Demander un service"
+      image: "ressources/sstep1.png"
+  utter_step_creating_s_3:
+    - text: "**3- Choisir parmi les demandes de service auxquelles votre contrat vous donne accès"
+      image: "ressources/sstep2.png"
+  utter_step_creating_s_4:
+    - text: "**4- Cliquer sur 'Demande' pour déclencher sa création"
+  utter_step_creating_s_5:
+    - text: "**! Les champs obligatoires sont marqués d'un “ * ”."
+  utter_step_creating_s_6:
+    - text: "**! Vous pouvez joindre une pièce jointe à votre ticket (30 Mo max)"
+  utter_step_creating_s_7:
+    - text: "**! Si vous avez plusieurs pièces jointes à joindre, utilisez un fichier zip où vous joignez les autres documents ultérieurement, une fois la 'demande de service' créée"
+  utter_step_creating_s_8:
+    - text: "**6- Une fois le questionnaire rempli, cliquez sur 'OK', votre 'demande de service' est créée et les équipes de support en sont informées"
+  utter_step_creating_s_9:
+    - text: "**! Vous pouvez trouver votre 'demande de service' dans votre menu 'Mon espace / Tickets / Demande de service'"
+      image: "ressources/sstep3.png"
+####################change fr################################
+  utter_steps_creating_demande_de_change:
+    - text: "Pour créer une 'demande de changement' sur EasyVista, vous devez :"
+  utter_step_creating_c_1:
+    - text: "**1- Cliquer sur 'Nouveau ticket'"
+      image: "ressources/step1.png"
+  utter_step_creating_c_2:
+    - text: "**2- Demander un changement"
+      image: "ressources/cstep1.png"
+  utter_step_creating_c_3:
+    - text: "**3- Choisir parmi les demandes de changement auxquelles votre contrat vous donne accès"
+      image: "ressources/cstep2.png"
+  utter_step_creating_c_4:
+    - text: "**4- Cliquer sur 'Demande' pour déclencher sa création"
+  utter_step_creating_c_5:
+    - text: "**! Les champs obligatoires sont marqués d'un astérisque '*'."
+  utter_step_creating_c_6:
+    - text: "**! Vous pouvez joindre une pièce jointe à votre ticket (30 Mo max)"
+  utter_step_creating_c_7:
+    - text: "**! Si vous avez plusieurs pièces jointes à joindre, utilisez un fichier zip où vous joindrez les autres documents plus tard, une fois que la 'demande de changement' a été créée"
+  utter_step_creating_c_8:
+    - text: "**6- Une fois le questionnaire rempli, cliquez sur 'OK', votre 'demande de changement' est créée et les équipes de support en sont informées."
+  utter_step_creating_c_9:
+    - text: "**! Vous pouvez trouver votre 'demande de changement' dans votre menu 'Mon Espace / Tickets / Demande de changement'"
+      image: "ressources/cstep3.png"
+  ###############################################################""""
+  
   utter_explain_Champ_Produit:
-    - text: " 'Field Produit' refers to your SBS product that is currently encountering an issue (Amplitude, Reporting) "
+    - text: "'Field Product' refers to your SBS product that is currently encountering an issue (Amplitude, Reporting) "
+  
+  utter_explain_Champ_Produit_fr:
+    - text: "'Champt Produit' se réfère à votre produit SBS qui rencontre actuellement un problème (Amplitude, Reporting)."
 
   utter_explain_Champ_Option:
-    - text: " 'Field Option' refers to your SBS product module"
+    - text: "'Field Option' refers to your SBS product module"
+  
+  utter_explain_Champ_Option_fr:
+    - text: "'Champ Option' fait référence au module de votre produit SBS."
 
   utter_explain_Champ_Environnement:
     - text: " 'Field Environnement' refers to your SBS product nature ('Production' or 'Recette'(Test))"

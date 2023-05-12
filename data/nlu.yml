@@ -271,32 +271,46 @@ nlu:
       - What are the steps to create a demand of service
       - steps demand of service creation
       - demand of service create step
+      - Quelles sont les étapes pour créer une demande de service
+      - Étapes de création d'une demande de service
+      - Étapes de création d'une demande de service
 
   - intent: askCreationDemandeDeChangetSteps
     examples: |
       - What are the steps to create an demand of change
       - steps demand of change creation
       - demand of change create step
+      - Quelles sont les étapes pour créer une demande de changement
+      - Étapes de création d'une demande de changement
+      - Étapes de création d'une demande de changement
 
   - intent: explainTicketProduct
     examples: |
       - What is Product?
       - Product?
+      - Qu'est-ce que le produit ?
+      - C'est quoi produit ?
+      - Produit ?
 
   - intent: explainTicketOption
     examples: |
       - What is Option?
       - Option?
+      - Qu'est-ce que option ?
+      - C'est quoi option ?
 
   - intent: explainTicketEnvironnement
     examples: |
       - What is Environnement?
       - Environnement?
+      - Qu'est-ce que environnement ?
+      - C'est quoi environnement ?
 
   - intent: explainTicketRGPD
     examples: |
       - What is RGPD?
       - RGPD?
+      - C'est quoi RGPD?
 
   - intent: informEnv
     examples: |
