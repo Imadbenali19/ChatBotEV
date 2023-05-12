@@ -1,0 +1,42 @@
+version: "3.1"
+
+rules:
+
+  - rule: Say goodbye anytime the user says goodbye
+    steps:
+      - intent: goodbye
+      - action: utter_goodbye
+
+  - rule: Say 'I am a bot' anytime the user challenges
+    steps:
+      - intent: bot_challenge
+      - action: utter_iamabot
+
+  - rule: Modules team
+    steps:
+      - intent: ask_modules_support_team
+      - action: action_inform_module_support_teams
+
+  - rule: quit rule
+    steps:
+      - intent: quit
+      - action: utter_goodbye
+
+  - rule: Activate form
+    steps:
+      # - action: utter_ask_ticket_title
+      - action: ticket_form
+      - active_loop: ticket_form
+
+  - rule: Submit form
+    condition:
+      - active_loop: ticket_form
+    steps:
+      - action: ticket_form
+      - active_loop: null
+      - slot_was_set:
+          - requested_slot: null
+      # - action: utter_ask_ticket_emergency
+      - action: action_create_ticket
+    # - action: action_choix_type_ticket
+

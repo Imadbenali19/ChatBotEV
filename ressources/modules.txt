@@ -1,0 +1,4 @@
+Lending:Autorisations simples ou plafonnees,comptabilisation d'engagement,Limites clients
+Account:depot a terme,Arretes de comptes,produit/package,referentiel compte,caisse,blacklist,lab (lutte anti blanchissement),base reporting
+Payment:cheques,virement,swift,effets,nivellement,credoc,remdoc
+Distribution:Libelles complementaires,Configurateur,Risque

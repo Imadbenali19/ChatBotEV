@@ -1,0 +1,244 @@
+version: "3.1"
+
+stories:
+
+  - story: happy path
+    steps:
+      - intent: greet
+      - action: utter_greet
+      - intent: mood_great
+      - action: utter_happy
+
+  - story: get started path
+    steps:
+      - intent: get_started
+      - action: utter_started
+
+  - story: something path
+    steps:
+      - intent: ask_for_something
+      - action: utter_ask_for_something
+
+  - story: sad path 1
+    steps:
+      - intent: greet
+      - action: utter_greet
+      - intent: mood_unhappy
+      - action: utter_cheer_up
+      - action: utter_did_that_help
+      - intent: affirm
+      - action: utter_happy
+
+  - story: sad path 2
+    steps:
+      - intent: greet
+      - action: utter_greet
+      - intent: mood_unhappy
+      - action: utter_cheer_up
+      - action: utter_did_that_help
+      - intent: deny
+      - action: utter_goodbye
+
+  - story: time path
+    steps:
+      - intent: greet
+      - action: utter_greet
+      - intent: ask_time
+      - action: action_show_time
+      - intent: thank
+      - action: utter_thank
+
+  - story: thanking path
+    steps:
+      - intent: greet
+      - action: utter_greet
+      - intent: thank
+      - action: utter_thank
+
+  - story: ask support team path
+    steps:
+      - intent: greet
+      - action: utter_greet
+      - intent: ask_support_team
+      - action: action_inform_support_teams
+      - intent: thank
+      - action: utter_thank
+
+  - story: ask support team modules path
+    steps:
+      - intent: greet
+      - action: utter_greet
+      - intent: ask_modules_support_team
+      - action: action_inform_module_support_teams
+      - intent: thank
+      - action: utter_thank
+
+  - story: ask ticket's type path
+    steps:
+      - intent: greet
+      - action: utter_greet
+      - intent: ask_type_tickets
+      - action: action_inform_ticket_type
+      - intent: thank
+      - action: utter_thank
+
+  - story: create ticket path
+    steps:
+      - intent: greet
+      - action: utter_greet
+      - intent: create_ticket
+      - action: utter_ask_type_ticket
+      - intent: inform
+        entities:
+          - ticket_type: incident
+      - slot_was_set:
+          - ticket_type: incident
+      - action: action_create_f_step
+      - action: ticket_form
+      - active_loop: ticket_form
+      - slot_was_set:
+          - requested_slot:
+              - ticket_title
+              - ticket_description
+              - ticket_option
+              - ticket_emergency
+              - ticket_impact
+              - ticket_environnement
+      - slot_was_set:
+          - ticket_title: "Title"
+          - ticket_description: "Description"
+          - ticket_emergency: "1"
+          - ticket_impact: "1"
+          - ticket_environnement: "Production"
+      - slot_was_set:
+          - requested_slot: null
+      - active_loop: null
+      - action: action_create_ticket
+
+  - story: create specific ticket path
+    steps:
+      - intent: greet
+      - action: utter_greet
+      - intent: create_specific_ticket
+        entities:
+          - ticket_type: incident
+      - slot_was_set:
+          - ticket_type: incident
+      - action: action_create_f_step
+      - action: ticket_form
+      - active_loop: ticket_form
+      - slot_was_set:
+          - requested_slot:
+              - ticket_title
+              - ticket_description
+              - ticket_option
+              - ticket_emergency
+              - ticket_impact
+              - ticket_environnement
+      - slot_was_set:
+          - ticket_title: "Title"
+          - ticket_description: "Description"
+          - ticket_emergency: "1"
+          - ticket_impact: "1"
+          - ticket_environnement: "Production"
+      - slot_was_set:
+          - requested_slot: null
+      - active_loop: null
+      - action: action_create_ticket
+
+  # - story: create ticket path 2 (demande service)
+  #   steps:
+  #   - intent: greet
+  #   - action: utter_greet
+  #   - intent: create_ticket
+  #   - action: utter_ask_type_ticket
+  #   - intent: inform
+  #     entities:
+  #       - ticket_type: demande de service
+  #   - slot_was_set:
+  #     - ticket_type: demande de service
+  #   - action: utter_type_ticket_confirmed
+  #   - action: action_choix_type_ticket
+
+  # - story: create ticket path 3 (demande de change)
+  #   steps:
+  #   - intent: greet
+  #   - action: utter_greet
+  #   - intent: create_ticket
+  #   - action: utter_ask_type_ticket
+  #   - intent: inform
+  #     entities:
+  #       - ticket_type: demande de change
+  #   - slot_was_set:
+  #     - ticket_type: demande de change
+  #   - action: utter_type_ticket_confirmed
+  #   - action: action_choix_type_ticket
+
+
+  - story: demand client habilitation path
+    steps:
+      - intent: greet
+      - action: utter_greet
+      - intent: habilitation_demand
+      - action: utter_habilitation_client
+
+  - story: demand incident creation steps path
+    steps:
+      - intent: greet
+      - action: utter_greet
+      - intent: askCreationIncidentSteps
+      - action: action_tell_steps_incident
+
+  - story: demand demande de service creation steps path
+    steps:
+      - intent: greet
+      - action: utter_greet
+      - intent: askCreationDemandeDeServiceSteps
+      - action: action_tell_steps_demande_de_service
+
+  - story: demand demande de change creation steps path
+    steps:
+      - intent: greet
+      - action: utter_greet
+      - intent: askCreationDemandeDeChangetSteps
+      - action: action_tell_steps_demande_de_change
+
+  - story: explain champ Produit path
+    steps:
+      - intent: greet
+      - action: utter_greet
+      - intent: explainTicketProduct
+      - action: utter_explain_Champ_Produit
+
+  - story: explain champ Option path
+    steps:
+      - intent: greet
+      - action: utter_greet
+      - intent: explainTicketOption
+      - action: utter_explain_Champ_Option
+
+  - story: explain champ Environnement path
+    steps:
+      - intent: greet
+      - action: utter_greet
+      - intent: explainTicketEnvironnement
+      - action: utter_explain_Champ_Environnement
+
+  - story: explain champ RGPD path
+    steps:
+      - intent: greet
+      - action: utter_greet
+      - intent: explainTicketRGPD
+      - action: utter_explain_Champ_RGPD
+
+    # - story: username path
+    #   steps:
+    #   - intent: greet
+    #   - action: utter_greet
+    #   - intent: user name
+    #   - action: action_user_names
+
+  - story: ask frensh path 2
+    steps:
+      - intent: greet_fr
+      - action: action_greet_frensh

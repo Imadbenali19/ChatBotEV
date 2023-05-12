@@ -1,0 +1,4 @@
+Incident (I) : C’est un événement opérationnel non prevu, qui ne s’inscrit pas dans le cadre normal d’un service, et qui entraîne une interruption de service ou encore sa dégradation en terme de qualité.
+Probleme (P) : ne peut être ouvert que par les équipes support (pas le client), c'est la cause d'un incident.
+Service (S) : C’est une demande formelle d’un utilisateur pour quelque chose devant être fournie - par exemple, une demande d’information ou des conseils.
+Change (C) : demande de changement, évolutuion

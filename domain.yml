@@ -1,0 +1,349 @@
+version: "3.1"
+
+intents:
+  - greet_en
+  - greet
+  - greet_fr
+  - goodbye
+  - affirm
+  - deny
+  - mood_great
+  - mood_unhappy
+  - bot_challenge
+  - ask_time
+  - thank
+  - ask_support_team
+  - ask_modules_support_team
+  - ask_type_tickets
+  - create_ticket
+  - inform
+  - habilitation_demand
+  - informEmergency
+  - informImpact
+  - askCreationIncidentSteps
+  - askCreationDemandeDeChangetSteps
+  - askCreationDemandeDeServiceSteps
+  - explainTicketProduct
+  - explainTicketOption
+  - explainTicketEnvironnement
+  - explainTicketRGPD
+  - create_specific_ticket
+  - get_started
+  - informEnv
+  - quit
+  - ask_for_something
+  - demand_parametre
+
+entities:
+  - team_name
+  - ticket_type
+  - ticket_emergency
+  - ticket_impact
+  - ticket_environnement
+
+slots:
+  team_name:
+    type: text
+    influence_conversation: true
+    mappings:
+      - type: from_entity
+        entity: team_name
+  module_team:
+    type: text
+    mappings:
+      - type: custom
+  ticket_type:
+    type: text
+    mappings:
+      - type: from_entity
+        entity: ticket_type
+  ticket_title:
+    type: text
+    influence_conversation: true
+    mappings:
+      - type: from_text
+        conditions:
+          - active_loop: ticket_form
+            requested_slot: ticket_title
+  ticket_description:
+    type: text
+    influence_conversation: true
+    mappings:
+      - type: from_text
+        conditions:
+          - active_loop: ticket_form
+            requested_slot: ticket_description
+  ticket_option:
+    type: text
+    influence_conversation: true
+    mappings:
+      - type: from_text
+        conditions:
+          - active_loop: ticket_form
+            requested_slot: ticket_option
+  ticket_emergency:
+    type: text
+    mappings:
+      - type: from_entity
+        entity: ticket_emergency
+  ticket_impact:
+    type: text
+    mappings:
+      - type: from_entity
+        entity: ticket_impact
+  ticket_environnement:
+    type: text
+    mappings:
+      - type: from_entity
+        entity: ticket_environnement
+  user:
+    type: text
+    mappings:
+      - type: custom
+
+forms:
+  ticket_form:
+    required_slots:
+      - ticket_title
+      - ticket_description
+      - ticket_option
+      - ticket_emergency
+      - ticket_impact
+      - ticket_environnement
+
+actions:
+  - action_show_time
+  - utter_thank
+  - action_inform_support_teams
+  - action_inform_module_support_teams
+  - action_inform_ticket_type
+  - action_create_ticket
+  - utter_next_step
+  - utter_slot_values
+  - utter_ask_ticket_impact
+  - utter_ask_ticket_emergency
+  - utter_ask_ticket_description
+  - utter_ask_ticket_environnement
+  - utter_ask_ticket_title
+  - utter_type_ticket_confirmed
+  - utter_ask_type_ticket
+  - action_tell_steps_incident
+  - action_tell_steps_demande_de_service
+  - action_tell_steps_demande_de_change
+  - action_create_f_step
+  - action_greet_frensh
+
+
+responses:
+  utter_greet:
+    - text: "Hey! How are you?"
+      buttons:
+        - title: "great"
+          payload: "/mood_great"
+        - title: "super sad"
+          payload: "/mood_sad"
+
+  utter_greet_fr:
+    - text: "Bonjour ! Comment puis-je vous aider ?"
+
+  utter_thank:
+    - text: "You're welcome!."
+
+  utter_started:
+    - condition:
+        - type: slot
+          name: user
+          value: "true"
+      text: "Hey, {user}! I'm EasyVista Bot. How can I assist you today?"
+
+    - text: "Hey, there! I'm EasyVista Bot. How can I assist you today?"
+      buttons:
+        - title: "Create ticket"
+          payload: '/create_ticket'
+        - title: "Demander un paramétrage"
+          payload: '/demand_parametre'
+        - title: "Something else!"
+          payload: '/ask_for_something'
+
+  utter_ask_for_something:
+    - text: "How can we help you?"
+  utter_cheer_up:
+    - text: "Here is something to cheer you up:"
+      image: "https://i.imgur.com/nGF1K8f.jpg"
+
+  utter_did_that_help:
+    - text: "Did that help you?"
+
+  utter_happy:
+    - text: "Great, carry on!"
+
+  utter_goodbye:
+    - text: "Bye"
+
+  utter_iamabot:
+    - text: "I am a bot, powered by Rasa."
+
+  utter_ask_type_ticket:
+    - text: "What type of ticket would you like to create?"
+      buttons:
+        - title: "Incident"
+          payload: '/inform{{"ticket_type":"incident"}}'
+        - title: "Demande de service"
+          payload: '/inform{{"ticket_type":"demande de service"}}'
+        - title: "Demande de change"
+          payload: '/inform{{"ticket_type":"demande de change"}}'
+
+  utter_type_ticket_confirmed:
+    - text: "Your '{ticket_type}' is ready to be created ! "
+
+  utter_habilitation_client:
+    - text: "Here is a table that demonstrate the client's habilitaton on EasyVista:"
+      image: "ressources/habilitationsClientEV.png"
+
+  utter_ask_ticket_title:
+    - text: "what's your '{ticket_type}'s title ?"
+
+  utter_ask_ticket_description:
+    - text: "what's your '{ticket_type}'s description ?"
+
+  utter_ask_ticket_option:
+    - text: "what's your '{ticket_type}'s option (module) ?"
+
+  utter_ask_ticket_emergency:
+    - text: "What's the ticket's emergency ?"
+      buttons:
+        - title: "1-High"
+          payload: '/informEmergency{{"ticket_emergency":"1"}}'
+        - title: "2-Medium"
+          payload: '/informEmergency{{"ticket_emergency":"2"}}'
+        - title: "3-Low"
+          payload: '/informEmergency{{"ticket_emergency":"3"}}'
+
+  utter_ask_ticket_impact:
+    - text: "What's the ticket's impact ?"
+      buttons:
+        - title: "1-High"
+          payload: '/informImpact{{"ticket_impact":"1"}}'
+        - title: "2-Medium"
+          payload: '/informImpact{{"ticket_impact":"2"}}'
+        - title: "3-Low"
+          payload: '/informImpact{{"ticket_impact":"3"}}'
+
+  utter_ask_ticket_environnement:
+    - text: "What's the product's environment ?"
+      buttons:
+        - title: "Production"
+          payload: '/informEnv{{"ticket_environnement":"Production"}}'
+        - title: "Recette"
+          payload: '/informEnv{{"ticket_environnement":"Recette"}}'
+
+
+  utter_slot_values:
+    - text: "I will remember that ur ticket title is {ticket_title} and descri {ticket_description} and the type is {ticket_type}and the emerg is {ticket_emergency} and the impact is {ticket_impact}"
+
+  utter_next_step:
+    - text: "Great, now can u set an emergency level for your {ticket_type}'s {ticket_title}"
+  ###################incident steps#################""
+  utter_steps_creating_incident:
+    - text: "To create an incident on EasyVista you need to:"
+  utter_step_creating_i_1:
+    - text: "**1- Click on New ticket"
+      image: "ressources/step1.png"
+  utter_step_creating_i_2:
+    - text: "**2- Declare the type incident"
+      image: "ressources/step2.png"
+  utter_step_creating_i_3:
+    - text: "**3- Choose among the types of incidents to which your contract gives you access"
+      image: "ressources/step3.png"
+  utter_step_creating_i_4:
+    - text: "**4- Click on 'Demande' to trigger its creation"
+  utter_step_creating_i_5:
+    - text: "**5- Complete a questionnaire to describe your incident, which will allow the Sopra Service Desk Banking to have the necessary information to work on your ticket"
+      image: "ressources/step4.png"
+  utter_step_creating_i_6:
+    - text: "**! Mandatory fields are marked with a “ * ”."
+  utter_step_creating_i_7:
+    - text: "**! You can attach an attachment to your ticket (30MB max)"
+  utter_step_creating_i_8:
+    - text: "**! If you have multiple attachments to attach, use a zip file where you attach the other documents later, once the incident has been created"
+  utter_step_creating_i_9:
+    - text: "**6- Once the questionnaire is completed, click on 'OK', your incident is created and the support teams are informed"
+  utter_step_creating_i_10:
+    - text: "**! You can find your incident in your 'My Space / Tickets / Incidents' menu"
+      image: "ressources/step5.png"
+  ###############################################
+
+  ##########demande de service steps################""
+  utter_steps_creating_demande_de_service:
+    - text: "To create a 'demande de service' on EasyVista you need to:"
+  utter_step_creating_s_1:
+    - text: "**1- Click on New ticket"
+      image: "ressources/step1.png"
+  utter_step_creating_s_2:
+    - text: "**2- Demand a service"
+      image: "ressources/sstep1.png"
+  utter_step_creating_s_3:
+    - text: "**3- Choose among the service requests to which your contract gives you access"
+      image: "ressources/sstep2.png"
+  utter_step_creating_s_4:
+    - text: "**4- Click on 'Demande' to trigger its creation"
+  utter_step_creating_s_5:
+    - text: "**! Mandatory fields are marked with a “ * ”."
+  utter_step_creating_s_6:
+    - text: "**! You can attach an attachment to your ticket (30MB max)"
+  utter_step_creating_s_7:
+    - text: "**! If you have multiple attachments to attach, use a zip file where you attach the other documents later, once the 'demande de service' has been created"
+  utter_step_creating_s_8:
+    - text: "**6- Once the questionnaire is completed, click on 'OK', your 'demande de service' is created and the support teams are informed"
+  utter_step_creating_s_9:
+    - text: "**! You can find your 'demande de service' in your 'My Space / Tickets / Demande de service' menu"
+      image: "ressources/sstep3.png"
+  ####################################################
+  ##########demande de change steps################""
+  utter_steps_creating_demande_de_change:
+    - text: "To create a 'demande de change' on EasyVista you need to:"
+  utter_step_creating_c_1:
+    - text: "**1- Click on New ticket"
+      image: "ressources/step1.png"
+  utter_step_creating_c_2:
+    - text: "**2- Demand a change"
+      image: "ressources/cstep1.png"
+  utter_step_creating_c_3:
+    - text: "**3- Choose among the change requests to which your contract gives you access"
+      image: "ressources/cstep2.png"
+  utter_step_creating_c_4:
+    - text: "**4- Click on 'Demande' to trigger its creation"
+  utter_step_creating_c_5:
+    - text: "**! Mandatory fields are marked with a “ * ”."
+  utter_step_creating_c_6:
+    - text: "**! You can attach an attachment to your ticket (30MB max)"
+  utter_step_creating_c_7:
+    - text: "**! If you have multiple attachments to attach, use a zip file where you attach the other documents later, once the 'demande de change' has been created"
+  utter_step_creating_c_8:
+    - text: "**6- Once the questionnaire is completed, click on 'OK', your 'demande de change' is created and the support teams are informed"
+  utter_step_creating_c_9:
+    - text: "**! You can find your 'demande de change' in your 'My Space / Tickets / Demande de changement' menu"
+      image: "ressources/cstep3.png"
+  ################################################
+
+  utter_explain_Champ_Produit:
+    - text: " 'Field Produit' refers to your SBS product that is currently encountering an issue (Amplitude, Reporting) "
+
+  utter_explain_Champ_Option:
+    - text: " 'Field Option' refers to your SBS product module"
+
+  utter_explain_Champ_Environnement:
+    - text: " 'Field Environnement' refers to your SBS product nature ('Production' or 'Recette'(Test))"
+
+  utter_explain_Champ_RGPD:
+    - text: " RGPD stands for 'Règlement Général sur la Protection des Données, which is the French equivalent of GDPR (General Data Protection Regulation). It is a regulation that was adopted by the European Union in 2016 and became enforceable in 2018. The purpose of RGPD/GDPR is to strengthen and harmonize data protection laws across the EU."
+
+
+
+
+
+
+
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true
