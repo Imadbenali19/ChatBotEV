@@ -1,0 +1,329 @@
+version: "3.1"
+
+nlu:
+  - intent: greet
+    examples: |
+      - hey
+      - hello
+      - hi
+      - hello there
+      - good morning
+      - good evening
+      - moin
+      - hey there
+      - let's go
+      - hey dude
+      - goodmorning
+      - goodevening
+      - goodafternoon
+      - bonsoir
+      - bonjour
+      - salut
+      - cv
+
+  - intent: get_started
+    examples: |
+      - i want help
+      - help
+      - aider
+      - j'ai besoin de l'aide
+      - aide
+
+  - intent: ask_for_something
+    examples: |
+      - ask for something
+      - i want to ...
+      - Je voudrais
+      - je veux
+
+
+  - intent: goodbye
+    examples: |
+      - cu
+      - good by
+      - cee you later
+      - good night
+      - bye
+      - goodbye
+      - have a nice day
+      - see you around
+      - bye bye
+      - see you later
+      - Au revoir!
+      - A demain
+      
+
+  - intent: affirm
+    examples: |
+      - yes
+      - y
+      - indeed
+      - of course
+      - that sounds good
+      - correct
+      - vrai
+      - très bien
+      - parfais!
+      - ok
+      - d'accord
+
+  - intent: deny
+    examples: |
+      - no
+      - n
+      - never
+      - I don't think so
+      - don't like that
+      - no way
+      - not really
+      - non 
+      - je ne suis pas d'accord
+      - pas d'accord
+
+  - intent: mood_great
+    examples: |
+      - perfect
+      - great
+      - amazing
+      - feeling like a king
+      - wonderful
+      - I am feeling very good
+      - I am great
+      - I am amazing
+      - I am going to save the world
+      - super stoked
+      - extremely good
+      - so so perfect
+      - so good
+      - so perfect
+      - parfait
+      - génial
+      - incroyable
+      - se sentir comme un roi
+      - merveilleux
+      - je me sens très bien
+      - je vais bien
+      - je suis incroyable
+      - je vais sauver le monde
+      - super excité
+      - extrêmement bon
+      - si parfait
+      - si bon
+      - si parfait
+
+  - intent: mood_unhappy
+    examples: |
+      - my day was horrible
+      - I am sad
+      - I don't feel very well
+      - I am disappointed
+      - super sad
+      - I'm so sad
+      - sad
+      - very sad
+      - unhappy
+      - not good
+      - not very good
+      - extremly sad
+      - so saad
+      - so sad
+      - ma journée était horrible
+      - je suis triste
+      - je ne me sens pas très bien
+      - je suis déçu
+      - super triste
+      - je suis tellement triste
+      - triste
+      - très triste
+      - malheureux
+      - pas bon
+      - pas très bon
+      - extrêmement triste
+      - si triste
+      - tellement triste
+
+  - intent: bot_challenge
+    examples: |
+      - are you a bot?
+      - are you a human?
+      - am I talking to a bot?
+      - am I talking to a human?
+      - Es-tu un bot ?
+      - Es-tu humain ?
+      - Est-ce que je parle à un bot ?
+      - Est-ce que je parle à un humain ?
+
+  - intent: ask_time
+    examples: |
+      - What time is it?
+      - Can you tell the time?
+      - time?
+      - Tell me the time?
+      - Quelle heure est-il ?
+      - Pouvez-vous donner l'heure ?
+      - l'heure ?
+      - Donnez-moi l'heure s'il vous plaît ?
+
+  - intent: thank
+    examples: |
+      - Thank u
+      - Thanks a lot
+      - tnx
+      - merci
+      - merci beaucoup
+      - mrc
+      - mrc bcp
+
+  - intent: ask_support_team
+    examples: |
+      - I want to know the support teams
+      - How many support teams are there ?
+      - What are the support teams ?
+      - Je veux connaître les équipes de support
+      - Combien y a-t-il d'équipes de support ?
+      - Quelles sont les équipes de support ?
+
+  - intent: ask_modules_support_team
+    examples: |
+      - What are the modules processed by [Account](team_name)
+      - What are the modules processed by [Lending](team_name)
+      - What are the modules processed by [Distribution](team_name)
+      - What are the modules processed by [Payment](team_name)
+
+  - intent: ask_type_tickets
+    examples: |
+      - What are the types of tickets
+      - Tickets types
+      - ticket type
+      - type ticket
+      - Tell me the ticket's different types
+      - Types de tickets
+      - Pouvez-vous me donner les différents types de tickets ?
+
+  - intent: create_ticket
+    examples: |
+      - I want to create ticket
+      - create ticket
+      - Ticket creation
+      - Je veux créer un ticket
+      - Créer un ticket
+      - Création de ticket
+
+  - intent: create_specific_ticket
+    examples: |
+      - I want to create [incident](ticket_type)
+      - create [incident](ticket_type)
+      - [incident](ticket_type) creation
+      - [demande de service](ticket_type) creation
+      - I want to create [demande de service](ticket_type)
+      - create [demande de service](ticket_type)
+      - [demande de service](ticket_type) creation
+      - I want to create [demande de change](ticket_type)
+      - create [demande de change](ticket_type)
+      - [demande de change](ticket_type) creation
+      - Je veux créer un [incident](ticket_type)
+      - Créer un [incident](ticket_type)
+      - [incident](ticket_type) création
+      - Je veux créer une [demande de service](ticket_type)
+      - Créer une [demande de service](ticket_type)
+      - Création d'une [demande de service](ticket_type)
+      - Je veux créer une [demande de change](ticket_type)
+      - Créer une [demande de change](ticket_type)
+      - Création d'une [demande de change](ticket_type)
+
+  - intent: inform
+    examples: |
+      - [incident](ticket_type)
+      - [demande de service](ticket_type)
+      - [demande de change](ticket_type)
+
+  - intent: habilitation_demand
+    examples: |
+      - Can you give me the client's habilitation
+      - client's habilitation
+      - habilitation client 
+      - Pouvez-vous me donner l'habilitation du client
+      - Habilitation du client
+
+  - intent: informEmergency
+    examples: |
+      - [1](ticket_emergency)
+      - [2](ticket_emergency)
+      - [3](ticket_emergency)
+
+  - intent: informImpact
+    examples: |
+      - [1](ticket_impact)
+      - [2](ticket_impact)
+      - [3](ticket_impact)
+
+  - intent: askCreationIncidentSteps
+    examples: |
+      - What are the steps to create an incident
+      - steps incident
+      - incident create step
+      - Quelles sont les étapes pour créer un incident
+      - Étapes de l'incident
+      - Étapes de création d'un incident
+
+  - intent: askCreationDemandeDeServiceSteps
+    examples: |
+      - What are the steps to create a demand of service
+      - steps demand of service creation
+      - demand of service create step
+
+  - intent: askCreationDemandeDeChangetSteps
+    examples: |
+      - What are the steps to create an demand of change
+      - steps demand of change creation
+      - demand of change create step
+
+  - intent: explainTicketProduct
+    examples: |
+      - What is Product?
+      - Product?
+
+  - intent: explainTicketOption
+    examples: |
+      - What is Option?
+      - Option?
+
+  - intent: explainTicketEnvironnement
+    examples: |
+      - What is Environnement?
+      - Environnement?
+
+  - intent: explainTicketRGPD
+    examples: |
+      - What is RGPD?
+      - RGPD?
+
+  - intent: informEnv
+    examples: |
+      - [Production](ticket_environnement)
+      - [Recette](ticket_environnement)
+
+  - intent: quit
+    examples: |
+      - quit
+      - quitter
+      - abondonner
+      - abort
+
+  - intent: demand_parametre
+    examples: |
+      - demand parametre 
+      - parametrage
+  
+  
+  
+
+  # - intent: inform_type_ticket_demande_service
+  #   examples: |
+  #     - [demande de service](ticket_type)
+  #     - Ok create an [demande de service](ticket_type)
+
+  # - intent: inform_type_ticket_demande_change
+  #   examples: |
+  #     - [demande de change](ticket_type)
+  #     - Ok create an [demande de change](ticket_type)
