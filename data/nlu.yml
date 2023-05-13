@@ -188,6 +188,10 @@ nlu:
       - What are the modules processed by [Lending](team_name)
       - What are the modules processed by [Distribution](team_name)
       - What are the modules processed by [Payment](team_name)
+      - Quels sont les modules traités par [Account](team_name)
+      - Quels sont les modules traités par [Lending](team_name)
+      - Quels sont les modules traités par [Distribution](team_name)
+      - Quels sont les modules traités par [Payment](team_name)
 
   - intent: ask_type_tickets
     examples: |

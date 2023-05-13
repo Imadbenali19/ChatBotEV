@@ -20,7 +20,9 @@ from colorama import init, Fore, Style
 from spacy.language import Language
 
 from spacy_language_detection import LanguageDetector
+from googletrans import Translator
 
+translator = Translator()
 def get_lang_detector(nlp, name):
     return LanguageDetector(seed=42)  # We use the seed 42
 
@@ -222,14 +224,32 @@ class ActionInformSupportTeams(Action):
         # Retrieve all teams and their team leads
         teams = collection.find({}, {'name': 1, 'teamLead': 1})
 
+        #Detect the language
+        message = tracker.latest_message.get("text", "")
+
+        job_title = message
+        doc = nlp_model(job_title)
+        language = doc._.language
+        print("doc : ",doc)
+        print("job_title : ",job_title)
+        print("msg : ",message)
+        managed_string="managed by"
+        if(language["language"]=='fr'):
+            managed_string="gérée par"
+        
+
         # Format and send the response
         info = []
         for team in teams:
             team_name = "" + team['name'].strip() + ""
             team_lead = team['teamLead']['name'].strip()
-            info.append(f"**{team_name}** managed by **{team_lead}**\n\n")
+            info.append(f"**{team_name}** {managed_string} **{team_lead}**\n\n")
 
-        dispatcher.utter_message(text=f"We have {''.join(info)}")
+        if(language["language"]=='fr'):
+            dispatcher.utter_message(text=f"On a {''.join(info)}")
+        else:
+            dispatcher.utter_message(text=f"We have {''.join(info)}")
+
         client.close()
         return []
 
@@ -243,6 +263,16 @@ class ActionInformModuleSupportTeams(Action):
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         
+        #Detect the language
+        message = tracker.latest_message.get("text", "")
+
+        job_title = message
+        doc = nlp_model(job_title)
+        language = doc._.language
+        print("doc : ",doc)
+        print("job_title : ",job_title)
+        print("msg : ",message)
+
         team_name = None
         for entity in tracker.latest_message['entities']:
             if entity['entity'] == 'team_name':
@@ -251,6 +281,7 @@ class ActionInformModuleSupportTeams(Action):
         if not team_name:
             dispatcher.utter_message("Sorry, I didn't catch the name of the team. Could you please repeat?")
             return []
+        
         # Connect to MongoDB
         client = MongoClient('mongodb+srv://imadsbsbenali:JEH0cHlnYaP2YpzB@cluster0.lcywgrn.mongodb.net/test?retryWrites=true&w=majority')
         db = client.chatbotEVdb
@@ -262,11 +293,19 @@ class ActionInformModuleSupportTeams(Action):
             dispatcher.utter_message(f"I don't have any information about the {team_name} team. Could you please try another team?")
             return []
 
-        modules = team['modules']
+        if(language["language"]=='fr'):
+            modules = team['modules']
+            msg="Les modules traités par "
+            msg2=" sont: "
+        else:
+            modules = team['modulesEN']
+            msg="The modules processed by "
+            msg2=" are: "
 
         # Format and send the response
         result = "" + ', '.join([module.strip().upper() for module in modules.split(',')]) + ""
-        dispatcher.utter_message(text=f"The modules processed by **{team_name}.upper()** are: **{result}**")
+        
+        dispatcher.utter_message(text=f"{msg} **{team_name.upper()}** {msg2}: **{result}**")
         client.close()
         #return [SlotSet("module_team", result)]
         return [AllSlotsReset()]
