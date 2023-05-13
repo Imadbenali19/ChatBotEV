@@ -10,7 +10,7 @@ rules:
   - rule: Say 'I am a bot' anytime the user challenges
     steps:
       - intent: bot_challenge
-      - action: utter_iamabot
+      - action: action_iamabot
 
   - rule: Modules team
     steps:

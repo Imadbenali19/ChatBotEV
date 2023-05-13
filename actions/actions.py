@@ -42,6 +42,143 @@ nlp_model.add_pipe('language_detector', last=True)
 
 #         return []
 
+class ActionGreet(Action):
+
+    def name(self) -> Text:
+        return "action_greet"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        
+        message = tracker.latest_message.get("text", "")
+
+        job_title = message
+        doc = nlp_model(job_title)
+        language = doc._.language
+        print(message)
+        print(message.startswith('salut'))
+        if(language['language']=='fr' or message.startswith('salut') or message.startswith('bonsoir') or message.startswith('bonjour') or message.startswith('cv')):
+            dispatcher.utter_message(response = "utter_greet_fr")
+        else:
+            dispatcher.utter_message(response = "utter_greet")
+
+        return []
+    
+class ActionHappy(Action):
+
+    def name(self) -> Text:
+        return "action_happy"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        
+        message = tracker.latest_message.get("text", "")
+
+        job_title = message
+        doc = nlp_model(job_title)
+        language = doc._.language
+        
+        
+        if(language['language']=='fr'):
+            dispatcher.utter_message(response = "utter_happy_fr")
+        else:
+            dispatcher.utter_message(response = "utter_happy")
+
+        return []
+
+class ActionCheerUp(Action):
+
+    def name(self) -> Text:
+        return "action_cheer_up"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        
+        message = tracker.latest_message.get("text", "")
+
+        job_title = message
+        doc = nlp_model(job_title)
+        language = doc._.language
+        
+        
+        if(language['language']=='fr'):
+            dispatcher.utter_message(response = "utter_cheer_up_fr")
+        else:
+            dispatcher.utter_message(response = "utter_cheer_up")
+
+        return []
+
+class ActionDidThatHelp(Action):
+
+    def name(self) -> Text:
+        return "action_did_that_help"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        
+        message = tracker.latest_message.get("text", "")
+
+        job_title = message
+        doc = nlp_model(job_title)
+        language = doc._.language
+        
+        
+        if(language['language']=='fr'):
+            dispatcher.utter_message(response = "utter_did_that_help_fr")
+        else:
+            dispatcher.utter_message(response = "utter_did_that_help")
+
+        return []
+
+class ActionThank(Action):
+
+    def name(self) -> Text:
+        return "action_thank"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        
+        message = tracker.latest_message.get("text", "")
+
+        job_title = message
+        doc = nlp_model(job_title)
+        language = doc._.language
+        
+        
+        if(language['language']=='fr'):
+            dispatcher.utter_message(response = "utter_thank_fr")
+        else:
+            dispatcher.utter_message(response = "utter_thank")
+
+        return []
+
+class ActionIamBOT(Action):
+
+    def name(self) -> Text:
+        return "action_iamabot"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        
+        message = tracker.latest_message.get("text", "")
+
+        job_title = message
+        doc = nlp_model(job_title)
+        language = doc._.language
+
+        if(language['language']=='fr'):
+            dispatcher.utter_message(response = "utter_iamabot_fr")
+        else:
+            dispatcher.utter_message(response = "utter_iamabot")
+
+        return []
+    
 class ActionShowTime(Action):
 
     def name(self) -> Text:
@@ -50,8 +187,20 @@ class ActionShowTime(Action):
     def run(self, dispatcher: CollectingDispatcher,
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        
+        message = tracker.latest_message.get("text", "")
 
-        dispatcher.utter_message(text=f"It's {dt.now()}")
+        job_title = message
+        doc = nlp_model(job_title)
+        language = doc._.language
+        print("doc : ",doc)
+        print("job_title : ",job_title)
+        print("msg : ",message)
+        
+        if(language['language']=='fr'):
+            dispatcher.utter_message(text=f"C'est {dt.now()}")
+        else:
+            dispatcher.utter_message(text=f"It's {dt.now()}")
 
         return []
 
@@ -65,17 +214,6 @@ class ActionInformSupportTeams(Action):
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
 
-        # info = []
-        # with open('ressources/teams.txt', 'r') as file:
-        #     for line in file:
-
-        #         team_info = line.strip().split(';')
-
-        #         info.append("\033[1m\033[91m" + team_info[0].strip() + "\033[0m" + " managed by " +"\033[1m\033[91m"+ team_info[1].strip()+ "\033[0m")
-
-        # dispatcher.utter_message(text=f"We have {info[0]}, {info[1]}, {info[2]} and {info[3]} ")
-
-        # return []
         # Connect to MongoDB
         client = MongoClient('mongodb+srv://imadsbsbenali:JEH0cHlnYaP2YpzB@cluster0.lcywgrn.mongodb.net/test?retryWrites=true&w=majority')
         db = client.chatbotEVdb
@@ -104,13 +242,7 @@ class ActionInformModuleSupportTeams(Action):
     def run(self, dispatcher: CollectingDispatcher,
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        # team_name = tracker.get_slot('team_name')
-
-        # if team_name:
-        #     dispatcher.utter_message(text=f"The modules processed by {team_name}")
-        # else:
-        #     dispatcher.utter_message(text=f"Nothing")
-        # return []
+        
         team_name = None
         for entity in tracker.latest_message['entities']:
             if entity['entity'] == 'team_name':
@@ -150,13 +282,6 @@ class ActionInformTicketType(Action):
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
 
-        # info = []
-
-        # with open('ressources/ticketsTypes.txt', 'r') as file:
-        #     for line in file:
-
-        #         ticket_type = line.strip().split(':')
-        #         info.append("\033[1m\033[91m" + ticket_type[0].upper() + "\033[0m" + " : " + ticket_type[1])
         client = MongoClient('mongodb+srv://imadsbsbenali:JEH0cHlnYaP2YpzB@cluster0.lcywgrn.mongodb.net/test?retryWrites=true&w=majority')
         db = client.chatbotEVdb
 
@@ -173,8 +298,6 @@ class ActionInformTicketType(Action):
             text += "\n\n"
 
         dispatcher.utter_message(text=f"{text}")
-
-
 
         client.close()
         return []
