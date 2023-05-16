@@ -180,7 +180,7 @@ stories:
       - intent: greet
       - action: action_greet
       - intent: habilitation_demand
-      - action: utter_habilitation_client
+      - action: action_habilitation_client
 
   - story: demand incident creation steps path
     steps:
@@ -208,28 +208,28 @@ stories:
       - intent: greet
       - action: action_greet
       - intent: explainTicketProduct
-      - action: utter_explain_Champ_Produit
+      - action: action_explain_Champ_Product
 
   - story: explain champ Option path
     steps:
       - intent: greet
       - action: action_greet
       - intent: explainTicketOption
-      - action: utter_explain_Champ_Option
+      - action: action_explain_Champ_Option
 
   - story: explain champ Environnement path
     steps:
       - intent: greet
       - action: action_greet
       - intent: explainTicketEnvironnement
-      - action: utter_explain_Champ_Environnement
+      - action: action_explain_Champ_Environnement
 
   - story: explain champ RGPD path
     steps:
       - intent: greet
       - action: action_greet
       - intent: explainTicketRGPD
-      - action: utter_explain_Champ_RGPD
+      - action: action_explain_Champ_RGPD
 
     # - story: username path
     #   steps:

@@ -16,7 +16,6 @@ from rasa_sdk import Action, Tracker
 from rasa_sdk.executor import CollectingDispatcher
 import pymysql
 from pymysql import Error
-from colorama import init, Fore, Style
 from spacy.language import Language
 
 from spacy_language_detection import LanguageDetector
@@ -60,10 +59,19 @@ class ActionGreet(Action):
         language = doc._.language
         print(message)
         print(message.startswith('salut'))
+
+        #Get the text within the utterance in the domain file
+        response_template_list = domain["responses"]["utter_greet"]
+        response_template_dict = response_template_list[0]  # assuming there's only one dictionary in the list
+        
+        # modify the response message
+        utter_text = response_template_dict["text"]
+
         if(language['language']=='fr' or message.startswith('salut') or message.startswith('bonsoir') or message.startswith('bonjour') or message.startswith('cv')):
-            dispatcher.utter_message(response = "utter_greet_fr")
+            translated_text = translator.translate(utter_text, dest='fr')
+            dispatcher.utter_message(text=translated_text.text)
         else:
-            dispatcher.utter_message(response = "utter_greet")
+            dispatcher.utter_message(text=utter_text)
 
         return []
     
@@ -82,11 +90,18 @@ class ActionHappy(Action):
         doc = nlp_model(job_title)
         language = doc._.language
         
+        #Get the text within the utterance in the domain file
+        response_template_list = domain["responses"]["utter_happy"]
+        response_template_dict = response_template_list[0]  # assuming there's only one dictionary in the list
+        
+        # modify the response message
+        utter_text = response_template_dict["text"]
         
         if(language['language']=='fr'):
-            dispatcher.utter_message(response = "utter_happy_fr")
+            translated_text = translator.translate(utter_text, dest='fr')
+            dispatcher.utter_message(text=translated_text.text)
         else:
-            dispatcher.utter_message(response = "utter_happy")
+            dispatcher.utter_message(text=utter_text)
 
         return []
 
@@ -105,11 +120,21 @@ class ActionCheerUp(Action):
         doc = nlp_model(job_title)
         language = doc._.language
         
+        #Get the text within the utterance in the domain file
+        response_template_list = domain["responses"]["utter_cheer_up"]
+        response_template_dict = response_template_list[0]  # assuming there's only one dictionary in the list
         
-        if(language['language']=='fr'):
-            dispatcher.utter_message(response = "utter_cheer_up_fr")
+        # modify the response message
+        utter_text = response_template_dict["text"]
+
+        # Get the image URL
+        image_url = response_template_dict.get("image")
+        
+        if(language["language"]=='fr'):
+            translated_text = translator.translate(utter_text, dest='fr')
+            dispatcher.utter_message(text=translated_text.text, image=image_url)
         else:
-            dispatcher.utter_message(response = "utter_cheer_up")
+            dispatcher.utter_message(text=utter_text, image=image_url)
 
         return []
 
@@ -128,11 +153,18 @@ class ActionDidThatHelp(Action):
         doc = nlp_model(job_title)
         language = doc._.language
         
+        #Get the text within the utterance in the domain file
+        response_template_list = domain["responses"]["utter_did_that_help"]
+        response_template_dict = response_template_list[0]  # assuming there's only one dictionary in the list
+        
+        # modify the response message
+        utter_text = response_template_dict["text"]
         
         if(language['language']=='fr'):
-            dispatcher.utter_message(response = "utter_did_that_help_fr")
+            translated_text = translator.translate(utter_text, dest='fr')
+            dispatcher.utter_message(text=translated_text.text)
         else:
-            dispatcher.utter_message(response = "utter_did_that_help")
+            dispatcher.utter_message(text=utter_text)
 
         return []
 
@@ -151,11 +183,18 @@ class ActionThank(Action):
         doc = nlp_model(job_title)
         language = doc._.language
         
+        #Get the text within the utterance in the domain file
+        response_template_list = domain["responses"]["utter_thank"]
+        response_template_dict = response_template_list[0]  # assuming there's only one dictionary in the list
+        
+        # modify the response message
+        utter_text = response_template_dict["text"]
         
         if(language['language']=='fr'):
-            dispatcher.utter_message(response = "utter_thank_fr")
+            translated_text = translator.translate(utter_text, dest='fr')
+            dispatcher.utter_message(text=translated_text.text)
         else:
-            dispatcher.utter_message(response = "utter_thank")
+            dispatcher.utter_message(text=utter_text)
 
         return []
 
@@ -174,10 +213,18 @@ class ActionIamBOT(Action):
         doc = nlp_model(job_title)
         language = doc._.language
 
+        #Get the text within the utterance in the domain file
+        response_template_list = domain["responses"]["utter_iamabot"]
+        response_template_dict = response_template_list[0]  # assuming there's only one dictionary in the list
+        
+        # modify the response message
+        utter_text = response_template_dict["text"]
+
         if(language['language']=='fr'):
-            dispatcher.utter_message(response = "utter_iamabot_fr")
+            translated_text = translator.translate(utter_text, dest='fr')
+            dispatcher.utter_message(text=translated_text.text)
         else:
-            dispatcher.utter_message(response = "utter_iamabot")
+            dispatcher.utter_message(text=utter_text)
 
         return []
     
@@ -233,10 +280,11 @@ class ActionInformSupportTeams(Action):
         print("doc : ",doc)
         print("job_title : ",job_title)
         print("msg : ",message)
+
         managed_string="managed by"
+
         if(language["language"]=='fr'):
             managed_string="gérée par"
-        
 
         # Format and send the response
         info = []
@@ -324,14 +372,29 @@ class ActionInformTicketType(Action):
         client = MongoClient('mongodb+srv://imadsbsbenali:JEH0cHlnYaP2YpzB@cluster0.lcywgrn.mongodb.net/test?retryWrites=true&w=majority')
         db = client.chatbotEVdb
 
+        #Detect the language
+        message = tracker.latest_message.get("text", "")
+
+        job_title = message
+        doc = nlp_model(job_title)
+        language = doc._.language
+        print("doc : ",doc)
+        print("job_title : ",job_title)
+        print("msg : ",message)
+
         # retrieve the team names from the 'teamNames' collection
         ticket_type_name = [f"**{ttype['name'].upper()}**" for ttype in db.ticketType.find()]
-        ticket_type_desc = [ttype['description'] for ttype in db.ticketType.find()]
-
+        msg="We have "
+        if(language["language"]=='fr' or message.startswith('Types de tickets')):
+            ticket_type_desc = [ttype['description'] for ttype in db.ticketType.find()]
+            msg="Nous avons "
+        else:  
+            ticket_type_desc = [ttype['descriptionEN'] for ttype in db.ticketType.find()]
+            
         info = [ticket_type_name[i:i+4] for i in range(0, len(ticket_type_name), 4)]
         text = ""
         for i in range(len(info)):
-            text += f"We have {len(info[i])} types: \n\n"
+            text += f"{msg} {len(info[i])} types: \n\n"
             for j in range(len(info[i])):
                 text += f"{info[i][j]}: {ticket_type_desc[i*4+j]} \n\n"
             text += "\n\n"
@@ -516,18 +579,40 @@ class ActionTellStepsIncident(Action):
     def run(self, dispatcher: CollectingDispatcher,
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        #Detect the language
+        message = tracker.latest_message.get("text", "")
 
-        dispatcher.utter_message(response="utter_steps_creating_incident")
-        dispatcher.utter_message(response="utter_step_creating_i_1")
-        dispatcher.utter_message(response="utter_step_creating_i_2")
-        dispatcher.utter_message(response="utter_step_creating_i_3")
-        dispatcher.utter_message(response="utter_step_creating_i_4")
-        dispatcher.utter_message(response="utter_step_creating_i_5")
-        dispatcher.utter_message(response="utter_step_creating_i_6")
-        dispatcher.utter_message(response="utter_step_creating_i_7")
-        dispatcher.utter_message(response="utter_step_creating_i_8")
-        dispatcher.utter_message(response="utter_step_creating_i_9")
-        dispatcher.utter_message(response="utter_step_creating_i_10")
+        job_title = message
+        doc = nlp_model(job_title)
+        language = doc._.language
+        print("doc : ",doc)
+        print("job_title : ",job_title)
+        print("msg : ",message)
+
+        if(language["language"]=='fr'):
+            dispatcher.utter_message(response="utter_steps_creating_incident_fr")
+            dispatcher.utter_message(response="utter_step_creating_i_1_fr")
+            dispatcher.utter_message(response="utter_step_creating_i_2_fr")
+            dispatcher.utter_message(response="utter_step_creating_i_3_fr")
+            dispatcher.utter_message(response="utter_step_creating_i_4_fr")
+            dispatcher.utter_message(response="utter_step_creating_i_5_fr")
+            dispatcher.utter_message(response="utter_step_creating_i_6_fr")
+            dispatcher.utter_message(response="utter_step_creating_i_7_fr")
+            dispatcher.utter_message(response="utter_step_creating_i_8_fr")
+            dispatcher.utter_message(response="utter_step_creating_i_9_fr")
+            dispatcher.utter_message(response="utter_step_creating_i_10_fr")
+        else:
+            dispatcher.utter_message(response="utter_steps_creating_incident")
+            dispatcher.utter_message(response="utter_step_creating_i_1")
+            dispatcher.utter_message(response="utter_step_creating_i_2")
+            dispatcher.utter_message(response="utter_step_creating_i_3")
+            dispatcher.utter_message(response="utter_step_creating_i_4")
+            dispatcher.utter_message(response="utter_step_creating_i_5")
+            dispatcher.utter_message(response="utter_step_creating_i_6")
+            dispatcher.utter_message(response="utter_step_creating_i_7")
+            dispatcher.utter_message(response="utter_step_creating_i_8")
+            dispatcher.utter_message(response="utter_step_creating_i_9")
+            dispatcher.utter_message(response="utter_step_creating_i_10")
 
         return []
 
@@ -540,17 +625,38 @@ class ActionTellStepsDemandeDeService(Action):
     def run(self, dispatcher: CollectingDispatcher,
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        #Detect the language
+        message = tracker.latest_message.get("text", "")
 
-        dispatcher.utter_message(response="utter_steps_creating_demande_de_service")
-        dispatcher.utter_message(response="utter_step_creating_s_1")
-        dispatcher.utter_message(response="utter_step_creating_s_2")
-        dispatcher.utter_message(response="utter_step_creating_s_3")
-        dispatcher.utter_message(response="utter_step_creating_s_4")
-        dispatcher.utter_message(response="utter_step_creating_s_5")
-        dispatcher.utter_message(response="utter_step_creating_s_6")
-        dispatcher.utter_message(response="utter_step_creating_s_7")
-        dispatcher.utter_message(response="utter_step_creating_s_8")
-        dispatcher.utter_message(response="utter_step_creating_s_9")
+        job_title = message
+        doc = nlp_model(job_title)
+        language = doc._.language
+        print("doc : ",doc)
+        print("job_title : ",job_title)
+        print("msg : ",message)
+
+        if(language["language"]=='fr'):
+            dispatcher.utter_message(response="utter_steps_creating_demande_de_service_fr")
+            dispatcher.utter_message(response="utter_step_creating_s_1_fr")
+            dispatcher.utter_message(response="utter_step_creating_s_2_fr")
+            dispatcher.utter_message(response="utter_step_creating_s_3_fr")
+            dispatcher.utter_message(response="utter_step_creating_s_4_fr")
+            dispatcher.utter_message(response="utter_step_creating_s_5_fr")
+            dispatcher.utter_message(response="utter_step_creating_s_6_fr")
+            dispatcher.utter_message(response="utter_step_creating_s_7_fr")
+            dispatcher.utter_message(response="utter_step_creating_s_8_fr")
+            dispatcher.utter_message(response="utter_step_creating_s_9_fr")
+        else:
+            dispatcher.utter_message(response="utter_steps_creating_demande_de_service")
+            dispatcher.utter_message(response="utter_step_creating_s_1")
+            dispatcher.utter_message(response="utter_step_creating_s_2")
+            dispatcher.utter_message(response="utter_step_creating_s_3")
+            dispatcher.utter_message(response="utter_step_creating_s_4")
+            dispatcher.utter_message(response="utter_step_creating_s_5")
+            dispatcher.utter_message(response="utter_step_creating_s_6")
+            dispatcher.utter_message(response="utter_step_creating_s_7")
+            dispatcher.utter_message(response="utter_step_creating_s_8")
+            dispatcher.utter_message(response="utter_step_creating_s_9")
 
         return []
 
@@ -564,16 +670,38 @@ class ActionTellStepsDemandeDeChange(Action):
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
 
-        dispatcher.utter_message(response="utter_steps_creating_demande_de_change")
-        dispatcher.utter_message(response="utter_step_creating_c_1")
-        dispatcher.utter_message(response="utter_step_creating_c_2")
-        dispatcher.utter_message(response="utter_step_creating_c_3")
-        dispatcher.utter_message(response="utter_step_creating_c_4")
-        dispatcher.utter_message(response="utter_step_creating_c_5")
-        dispatcher.utter_message(response="utter_step_creating_c_6")
-        dispatcher.utter_message(response="utter_step_creating_c_7")
-        dispatcher.utter_message(response="utter_step_creating_c_8")
-        dispatcher.utter_message(response="utter_step_creating_c_9")
+        #Detect the language
+        message = tracker.latest_message.get("text", "")
+
+        job_title = message
+        doc = nlp_model(job_title)
+        language = doc._.language
+        print("doc : ",doc)
+        print("job_title : ",job_title)
+        print("msg : ",message)
+
+        if(language["language"]=='fr'):
+            dispatcher.utter_message(response="utter_steps_creating_demande_de_change_fr")
+            dispatcher.utter_message(response="utter_step_creating_c_1_fr")
+            dispatcher.utter_message(response="utter_step_creating_c_2_fr")
+            dispatcher.utter_message(response="utter_step_creating_c_3_fr")
+            dispatcher.utter_message(response="utter_step_creating_c_4_fr")
+            dispatcher.utter_message(response="utter_step_creating_c_5_fr")
+            dispatcher.utter_message(response="utter_step_creating_c_6_fr")
+            dispatcher.utter_message(response="utter_step_creating_c_7_fr")
+            dispatcher.utter_message(response="utter_step_creating_c_8_fr")
+            dispatcher.utter_message(response="utter_step_creating_c_9_fr")
+        else:
+            dispatcher.utter_message(response="utter_steps_creating_demande_de_change")
+            dispatcher.utter_message(response="utter_step_creating_c_1")
+            dispatcher.utter_message(response="utter_step_creating_c_2")
+            dispatcher.utter_message(response="utter_step_creating_c_3")
+            dispatcher.utter_message(response="utter_step_creating_c_4")
+            dispatcher.utter_message(response="utter_step_creating_c_5")
+            dispatcher.utter_message(response="utter_step_creating_c_6")
+            dispatcher.utter_message(response="utter_step_creating_c_7")
+            dispatcher.utter_message(response="utter_step_creating_c_8")
+            dispatcher.utter_message(response="utter_step_creating_c_9")
 
         return []
 
@@ -631,23 +759,160 @@ class ActionCreateFirstStep(Action):
 
 #         return []
 
-class ActionGreetFrensh(Action):
-    def name(self) -> Text:
-        return "action_greet_frensh"
+class ActionHabilitationClient(Action):
 
-    def run(
-            self,
-            dispatcher: CollectingDispatcher,
+    def name(self) -> Text:
+        return "action_habilitation_client"
+
+    def run(self, dispatcher: CollectingDispatcher,
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-
+        
         message = tracker.latest_message.get("text", "")
 
         job_title = message
         doc = nlp_model(job_title)
         language = doc._.language
-        if(language=='en'):
-            print("YES ENGLISH!")
-        print(language)
-        print(language['language'])
+        
+        #Get the text within the utterance in the domain file
+        response_template_list = domain["responses"]["utter_habilitation_client"]
+        response_template_dict = response_template_list[0]  # assuming there's only one dictionary in the list
+        
+        # modify the response message
+        utter_text = response_template_dict["text"]
+
+        # Get the image URL
+        image_url = response_template_dict.get("image")
+        
+        if(language["language"]=='fr'):
+            translated_text = translator.translate(utter_text, dest='fr')
+            dispatcher.utter_message(text=translated_text.text, image=image_url)
+        else:
+            dispatcher.utter_message(text=utter_text, image=image_url)
+
+        return []
+
+class ActionExplainChampProduct(Action):
+
+    def name(self) -> Text:
+        return "action_explain_Champ_Product"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        
+        message = tracker.latest_message.get("text", "")
+
+        job_title = message
+        doc = nlp_model(job_title)
+        language = doc._.language
+        
+        #Get the text within the utterance in the domain file
+        response_template_list = domain["responses"]["utter_explain_Champ_Product"]
+        response_template_dict = response_template_list[0]  # assuming there's only one dictionary in the list
+        
+        # modify the response message
+        utter_text = response_template_dict["text"]
+        
+        if(language["language"]=='fr'):
+            translated_text = translator.translate(utter_text, dest='fr')
+            dispatcher.utter_message(text=translated_text.text)
+        else:
+            dispatcher.utter_message(text=utter_text)
+
+        return []
+
+class ActionExplainChampOption(Action):
+
+    def name(self) -> Text:
+        return "action_explain_Champ_Option"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        
+        message = tracker.latest_message.get("text", "")
+
+        job_title = message
+        doc = nlp_model(job_title)
+        language = doc._.language
+        
+        #Get the text within the utterance in the domain file
+        response_template_list = domain["responses"]["utter_explain_Champ_Option"]
+        response_template_dict = response_template_list[0]  # assuming there's only one dictionary in the list
+        
+        # modify the response message
+        utter_text = response_template_dict["text"]
+        
+        if(language["language"]=='fr'):
+            translated_text = translator.translate(utter_text, dest='fr')
+            dispatcher.utter_message(text=translated_text.text)
+        else:
+            dispatcher.utter_message(text=utter_text)
+
+        return []
+
+class ActionExplainChampEnvironnement(Action):
+
+    def name(self) -> Text:
+        return "action_explain_Champ_Environnement"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        
+        message = tracker.latest_message.get("text", "")
+
+        job_title = message
+        doc = nlp_model(job_title)
+        language = doc._.language
+        
+        #Get the text within the utterance in the domain file
+        response_template_list = domain["responses"]["utter_explain_Champ_Environnement"]
+        response_template_dict = response_template_list[0]  # assuming there's only one dictionary in the list
+        
+        # modify the response message
+        utter_text = response_template_dict["text"]
+        
+        if(language["language"]=='fr' and "environment".lower() not in message.lower()):
+            translated_text = translator.translate(utter_text, dest='fr')
+            dispatcher.utter_message(text=translated_text.text)
+        else:
+            dispatcher.utter_message(text=utter_text)
+
+        return []
+
+class ActionExplainChampRGPD(Action):
+
+    def name(self) -> Text:
+        return "action_explain_Champ_RGPD"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        
+        message = tracker.latest_message.get("text", "")
+
+        job_title = message
+        doc = nlp_model(job_title)
+        language = doc._.language
+        
+        #Get the text within the utterance in the domain file
+        response_template_list = domain["responses"]["utter_explain_Champ_RGPD"]
+        response_template_dict = response_template_list[0]  # assuming there's only one dictionary in the list
+        
+        # modify the response message
+        utter_text = response_template_dict["text"]
+        
+        if(message.lower().startswith("RGPD".lower())):
+            translated_text = translator.translate(utter_text, dest='fr')
+            dispatcher.utter_message(text=translated_text.text)
+        elif(message.lower().startswith("GDPR".lower())):
+            dispatcher.utter_message(text=utter_text)
+        elif(language["language"]=='fr'):
+            translated_text = translator.translate(utter_text, dest='fr')
+            dispatcher.utter_message(text=translated_text.text)
+        else:
+            dispatcher.utter_message(text=utter_text)
+
         return []

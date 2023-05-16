@@ -135,6 +135,11 @@ actions:
   - action_did_that_help
   - action_thank
   - action_iamabot
+  - action_habilitation_client
+  - action_explain_Champ_Product
+  - action_explain_Champ_Option
+  - action_explain_Champ_RGPD
+  - action_explain_Champ_Environnement
 
 
 responses:
@@ -146,14 +151,14 @@ responses:
         - title: "super sad"
           payload: "/mood_sad"
 
-  utter_greet_fr:
-    - text: "Salut ! Comment allez-vous ?"
+  # utter_greet_fr:
+  #   - text: "Salut ! Comment allez-vous ?"
 
   utter_thank:
     - text: "You're welcome!."
   
-  utter_thank_fr:
-    - text: "De rien !"
+  # utter_thank_fr:
+  #   - text: "De rien !"
 
   utter_started:
     - condition:
@@ -174,28 +179,28 @@ responses:
   utter_ask_for_something:
     - text: "How can we help you?"
     
-  utter_ask_for_something_fr:
-    - text: "Est-ce que cela vous a aidé ?"
+  # utter_ask_for_something_fr:
+  #   - text: "Est-ce que cela vous a aidé ?"
 
   utter_cheer_up:
     - text: "Here is something to cheer you up:"
       image: "https://i.imgur.com/nGF1K8f.jpg"
   
-  utter_cheer_up_fr:
-    - text: "Voici quelque chose pour vous remonter le moral :"
-      image: "https://i.imgur.com/nGF1K8f.jpg"
+  # utter_cheer_up_fr:
+  #   - text: "Voici quelque chose pour vous remonter le moral :"
+  #     image: "https://i.imgur.com/nGF1K8f.jpg"
 
   utter_did_that_help:
     - text: "Did that help you?"
   
-  utter_did_that_help_fr:
-    - text: "Est-ce que cela vous a aidé ?"
+  # utter_did_that_help_fr:
+  #   - text: "Est-ce que cela vous a aidé ?"
 
   utter_happy:
     - text: "Great, carry on!"
   
-  utter_happy_fr:
-    - text: "Super, continue alors.!"
+  # utter_happy_fr:
+  #   - text: "Super, continue alors.!"
 
   utter_goodbye:
     - text: "Bye"
@@ -203,8 +208,8 @@ responses:
   utter_iamabot:
     - text: "I am a bot, powered by Rasa."
  
-  utter_iamabot_fr:
-    - text: "Je suis un bot alimenté par Rasa."
+  # utter_iamabot_fr:
+  #   - text: "Je suis un bot alimenté par Rasa."
 
   utter_ask_type_ticket:
     - text: "What type of ticket would you like to create?"
@@ -216,35 +221,35 @@ responses:
         - title: "Demand of change"
           payload: '/inform{{"ticket_type":"demande de change"}}'
   
-  utter_ask_type_ticket_fr:
-    - text: "Quel type de ticket voulez-vous créer "
-      buttons:
-        - title: "Incident"
-          payload: '/inform{{"ticket_type":"incident"}}'
-        - title: "Demande de service"
-          payload: '/inform{{"ticket_type":"demande de service"}}'
-        - title: "Demande de change"
-          payload: '/inform{{"ticket_type":"demande de change"}}'
+  # utter_ask_type_ticket_fr:
+  #   - text: "Quel type de ticket voulez-vous créer "
+  #     buttons:
+  #       - title: "Incident"
+  #         payload: '/inform{{"ticket_type":"incident"}}'
+  #       - title: "Demande de service"
+  #         payload: '/inform{{"ticket_type":"demande de service"}}'
+  #       - title: "Demande de change"
+  #         payload: '/inform{{"ticket_type":"demande de change"}}'
 
   utter_type_ticket_confirmed:
     - text: "Your '{ticket_type}' is ready to be created ! "
   
-  utter_type_ticket_confirmed_fr:
-    - text: "Votre '{ticket_type}' est prêt à être créé !"
+  # utter_type_ticket_confirmed_fr:
+  #   - text: "Votre '{ticket_type}' est prêt à être créé !"
 
   utter_habilitation_client:
     - text: "Here is a table that demonstrate the client's habilitaton on EasyVista:"
       image: "ressources/habilitationsClientEV.png"
 
-  utter_habilitation_client_fr:
-    - text: "Voici un tableau qui montre l'habilitation du client sur EasyVista :"
-      image: "ressources/habilitationsClientEV.png"
+  # utter_habilitation_client_fr:
+  #   - text: "Voici un tableau qui montre l'habilitation du client sur EasyVista :"
+  #     image: "ressources/habilitationsClientEV.png"
 
   utter_ask_ticket_title:
     - text: "what's your '{ticket_type}'s title ?"
   
-  utter_ask_ticket_title_fr:
-    - text: "Quel est le titre de votre '{ticket_type}' ?"
+  # utter_ask_ticket_title_fr:
+  #   - text: "Quel est le titre de votre '{ticket_type}' ?"
 
   utter_ask_ticket_description:
     - text: "what's your '{ticket_type}'s description ?"
@@ -450,24 +455,20 @@ responses:
       image: "ressources/cstep3.png"
   ###############################################################""""
   
-  utter_explain_Champ_Produit:
+  utter_explain_Champ_Product:
     - text: "'Field Product' refers to your SBS product that is currently encountering an issue (Amplitude, Reporting) "
   
-  utter_explain_Champ_Produit_fr:
-    - text: "'Champt Produit' se réfère à votre produit SBS qui rencontre actuellement un problème (Amplitude, Reporting)."
-
   utter_explain_Champ_Option:
     - text: "'Field Option' refers to your SBS product module"
   
-  utter_explain_Champ_Option_fr:
-    - text: "'Champ Option' fait référence au module de votre produit SBS."
-
   utter_explain_Champ_Environnement:
-    - text: " 'Field Environnement' refers to your SBS product nature ('Production' or 'Recette'(Test))"
+    - text: "Field Environment refers to your SBS product nature ('Production' or 'Recette'(Test))"
 
   utter_explain_Champ_RGPD:
-    - text: " RGPD stands for 'Règlement Général sur la Protection des Données, which is the French equivalent of GDPR (General Data Protection Regulation). It is a regulation that was adopted by the European Union in 2016 and became enforceable in 2018. The purpose of RGPD/GDPR is to strengthen and harmonize data protection laws across the EU."
+    - text: "RGPD '(GDPR in English)' stands for 'Réglement Général sur la Protection des Données, which is the French equivalent of GDPR (General Data Protection Regulation). It is a regulation that was adopted by the European Union in 2016 and became enforceable in 2018. The purpose of RGPD/GDPR is to strengthen and harmonize data protection laws across the EU."
 
+  utter_please_rephrase:
+  - text: I'm sorry, I didn't quite understand that. Could you rephrase?
 
 
 

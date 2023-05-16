@@ -202,6 +202,8 @@ nlu:
       - Tell me the ticket's different types
       - Types de tickets
       - Pouvez-vous me donner les différents types de tickets ?
+      - Dites-moi les différents types de tickets ?
+      - différents types de tickets ?
 
   - intent: create_ticket
     examples: |
@@ -268,6 +270,7 @@ nlu:
       - Quelles sont les étapes pour créer un incident
       - Étapes de l'incident
       - Étapes de création d'un incident
+      - incident étapes de création
 
   - intent: askCreationDemandeDeServiceSteps
     examples: |
@@ -276,7 +279,7 @@ nlu:
       - demand of service create step
       - Quelles sont les étapes pour créer une demande de service
       - Étapes de création d'une demande de service
-      - Étapes de création d'une demande de service
+      - demande de service étapes de création
 
   - intent: askCreationDemandeDeChangetSteps
     examples: |
@@ -285,7 +288,7 @@ nlu:
       - demand of change create step
       - Quelles sont les étapes pour créer une demande de changement
       - Étapes de création d'une demande de changement
-      - Étapes de création d'une demande de changement
+      - demande de changement étapes de création
 
   - intent: explainTicketProduct
     examples: |
@@ -301,19 +304,27 @@ nlu:
       - Option?
       - Qu'est-ce que option ?
       - C'est quoi option ?
+      - L'option
 
   - intent: explainTicketEnvironnement
     examples: |
-      - What is Environnement?
-      - Environnement?
+      - What is environment?
+      - environment?
       - Qu'est-ce que environnement ?
       - C'est quoi environnement ?
+      - L'environnement?
+      - environnement?
 
   - intent: explainTicketRGPD
     examples: |
       - What is RGPD?
+      - What is GDPR?
       - RGPD?
+      - Qu'est-ce que RGPD ?
       - C'est quoi RGPD?
+      - Qu'est-ce que GDPR ?
+      - C'est quoi GDPR?
+      - GDPR?
 
   - intent: informEnv
     examples: |
