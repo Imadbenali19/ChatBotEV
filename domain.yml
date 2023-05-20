@@ -98,6 +98,10 @@ slots:
     type: text
     mappings:
       - type: custom
+  is_description:
+    type: text
+    mappings:
+      - type: custom
 
 forms:
   ticket_form:
@@ -140,6 +144,8 @@ actions:
   - action_explain_Champ_Option
   - action_explain_Champ_RGPD
   - action_explain_Champ_Environnement
+  # - validate_ticket_form
+  - validate_ticket_form
 
 
 responses:
@@ -253,7 +259,7 @@ responses:
 
   utter_ask_ticket_description:
     - text: "what's your '{ticket_type}'s description ?"
-
+  
   utter_ask_ticket_option:
     - text: "what's your '{ticket_type}'s option (module) ?"
 

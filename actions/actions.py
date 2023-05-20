@@ -12,9 +12,11 @@ from typing import Any, Text, Dict, List
 import spacy
 from pymongo import MongoClient
 from rasa_sdk.events import SlotSet, AllSlotsReset
-from rasa_sdk import Action, Tracker
+from rasa_sdk import Action, Tracker, FormValidationAction
 from rasa_sdk.executor import CollectingDispatcher
+from rasa_sdk.types import DomainDict
 import pymysql
+
 from pymysql import Error
 from spacy.language import Language
 
@@ -67,7 +69,7 @@ class ActionGreet(Action):
         # modify the response message
         utter_text = response_template_dict["text"]
 
-        if(language['language']=='fr' or message.startswith('salut') or message.startswith('bonsoir') or message.startswith('bonjour') or message.startswith('cv')):
+        if(language['language']=='fr' or message.lower().startswith('salut') or message.lower().startswith('bonsoir') or message.lower().startswith('bonjour') or message.lower().startswith('cv')):
             translated_text = translator.translate(utter_text, dest='fr')
             dispatcher.utter_message(text=translated_text.text)
         else:
@@ -358,7 +360,6 @@ class ActionInformModuleSupportTeams(Action):
         #return [SlotSet("module_team", result)]
         return [AllSlotsReset()]
 
-
 class ActionInformTicketType(Action):
 
     def name(self) -> Text:
@@ -403,7 +404,6 @@ class ActionInformTicketType(Action):
 
         client.close()
         return []
-
 
 class ActionCreateTicket(Action):
 
@@ -916,3 +916,74 @@ class ActionExplainChampRGPD(Action):
             dispatcher.utter_message(text=utter_text)
 
         return []
+
+
+class ValidateTicketForm(FormValidationAction):
+    def name(self) -> Text:
+        return "validate_ticket_form"
+
+    
+    #################################################
+
+    def validate_ticket_description(
+        self,
+        slot_value: Any,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: DomainDict,
+    ) -> Dict[Text, Any]:
+        """Validate `ticket_description` value."""
+
+        description = slot_value.lower()  # Convert to lowercase for case-insensitive matching
+        #keywords for the option
+        caisseKey = ["caisse", "billetage", "nomenclature 004","bkcaib","bkcai","nomenclature 095"]
+        parametrageKey = ["Nomenclature 098", "parametrage"]
+        referentielKey = ["tiers", "clients","referentiels","gestionnaire","decisionnaire","niveau de forçage"]
+        paymentKey = ["swift","cheques"]
+        tfjKey = ["tfj","cbmaj600","cbmaj500","cbmaj540"]
+        arreteKey = ["arretes de comptes","calcul des arretes","interets debiteurs","interets crediteurs","calcul des agios"]
+        #Keywords for P1
+        p1key = ["plantage programme tfj","probleme tfj","plantage interface","blocage chaine tfj"]
+        ticket_option = None
+        ticket_impact = None
+        ticket_emergency = None
+        # Check if the description contains the keywords of caisse    
+        if any(keyword in description for keyword in caisseKey):
+            print("yes given caisse")
+            ticket_option = "Caisse"
+        elif any(keyword in description for keyword in parametrageKey):
+            print("yes given parametrage")
+            ticket_option = "Parametrage"
+        elif any(keyword in description for keyword in referentielKey):
+            print("yes given referentiels")
+            ticket_option = "Referentiels"
+        elif any(keyword in description for keyword in paymentKey):
+            print("yes given referentiels")
+            ticket_option = "Payment"
+        elif any(keyword in description for keyword in tfjKey):
+            print("yes given TFJ")
+            ticket_option = "TFJ"
+        elif any(keyword in description for keyword in arreteKey):
+            print("yes given arrêtes comptes")
+            ticket_option = "Arrêtés des comptes"
+        else:
+            print("no")
+
+        if any(keyword in description for keyword in p1key):
+            print("yes P1")
+            ticket_impact = "1"
+            ticket_emergency = "1"
+        else:
+            print("not sure P1")
+
+        return {
+            "ticket_description": description,
+            "ticket_option": ticket_option,
+            "ticket_impact": ticket_impact,
+            "ticket_emergency": ticket_emergency
+        }
+
+                
+
+            
+            
