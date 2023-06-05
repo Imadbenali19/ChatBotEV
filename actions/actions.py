@@ -23,6 +23,8 @@ from spacy.language import Language
 from spacy_language_detection import LanguageDetector
 from googletrans import Translator
 
+import socketio
+
 translator = Translator()
 def get_lang_detector(nlp, name):
     return LanguageDetector(seed=42)  # We use the seed 42
@@ -30,6 +32,10 @@ def get_lang_detector(nlp, name):
 nlp_model = spacy.load('en_core_web_sm')
 Language.factory("language_detector", func=get_lang_detector)
 nlp_model.add_pipe('language_detector', last=True)
+
+
+###################
+
 
 #
 # class ActionHelloWorld(Action):
@@ -75,6 +81,9 @@ class ActionGreet(Action):
         else:
             dispatcher.utter_message(text=utter_text)
 
+        token=tracker.get_slot("token")
+
+        print("hi your token  : ",token)
         return []
     
 class ActionHappy(Action):
@@ -99,7 +108,7 @@ class ActionHappy(Action):
         # modify the response message
         utter_text = response_template_dict["text"]
         
-        if(language['language']=='fr'):
+        if(language['language']=='fr' or message.lower().startswith('vrai') or message.lower().startswith("d'accord")):
             translated_text = translator.translate(utter_text, dest='fr')
             dispatcher.utter_message(text=translated_text.text)
         else:
@@ -917,6 +926,28 @@ class ActionExplainChampRGPD(Action):
 
         return []
 
+class ActionTellToken(Action):
+    def name(self) -> Text:
+        return "action_tell_token"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        
+        message = tracker.latest_message.get("text", "")
+        print("message : ",message)
+        token_start_index = message.find('"token":"') + len('"token":"')
+        token_end_index = message.find('"', token_start_index)
+        token = message[token_start_index:token_end_index]
+        token_parts = token.split(':')
+        token_value = token_parts[0].strip("'")
+
+        print("JWT token : ",token_value)
+        
+        dispatcher.utter_message(response="utter_started")
+
+        return [SlotSet("token", token_value)]
+
 
 class ValidateTicketForm(FormValidationAction):
     def name(self) -> Text:
@@ -925,6 +956,24 @@ class ValidateTicketForm(FormValidationAction):
     
     #################################################
 
+    def validate_ticket_type(
+        self,
+        slot_value: Any,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: DomainDict,
+    ) -> Dict[Text, Any]:
+        """Validate `ticket_type` value."""
+
+        ttype = slot_value.lower()  # Convert to lowercase for case-insensitive matching
+        # Check if ticket type is a demand of service  
+        if ttype=="demande de service":
+            print("yes demand of service")
+            return {"ticket_type": ttype, "ticket_impact": "4","ticket_emergency":"4"}
+        else:
+            print("not demand of service")
+            return {"ticket_type": ttype, "ticket_impact": None,"ticket_emergency": None}
+       
     def validate_ticket_description(
         self,
         slot_value: Any,
@@ -945,8 +994,7 @@ class ValidateTicketForm(FormValidationAction):
         #Keywords for P1
         p1key = ["plantage programme tfj","probleme tfj","plantage interface","blocage chaine tfj"]
         ticket_option = None
-        ticket_impact = None
-        ticket_emergency = None
+        
         # Check if the description contains the keywords of caisse    
         if any(keyword in description for keyword in caisseKey):
             print("yes given caisse")
@@ -968,22 +1016,21 @@ class ValidateTicketForm(FormValidationAction):
             ticket_option = "Arrêtés des comptes"
         else:
             print("no")
-
-        if any(keyword in description for keyword in p1key):
-            print("yes P1")
-            ticket_impact = "1"
-            ticket_emergency = "1"
-        else:
-            print("not sure P1")
+        ticket_emergency = tracker.get_slot("ticket_emergency")
+        ticket_impact = tracker.get_slot("ticket_impact")
+        if  ticket_emergency is None and ticket_impact is None : 
+            ticket_emergency = None
+            ticket_impact = None
+            if any(keyword in description for keyword in p1key):
+                print("yes P1")
+                ticket_impact = "1"
+                ticket_emergency = "1"
+            else:
+                print("not sure P1")
 
         return {
             "ticket_description": description,
             "ticket_option": ticket_option,
             "ticket_impact": ticket_impact,
             "ticket_emergency": ticket_emergency
-        }
-
-                
-
-            
-            
+        }       

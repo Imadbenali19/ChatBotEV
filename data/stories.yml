@@ -12,7 +12,7 @@ stories:
   - story: get started path
     steps:
       - intent: get_started
-      - action: utter_started
+      - action: action_tell_token
 
   - story: something path
     steps:
@@ -87,17 +87,11 @@ stories:
       - intent: greet
       - action: action_greet
       - intent: create_ticket
-      - action: utter_ask_type_ticket
-      - intent: inform
-        entities:
-          - ticket_type: incident
-      - slot_was_set:
-          - ticket_type: incident
-      - action: action_create_f_step
       - action: ticket_form
       - active_loop: ticket_form
       - slot_was_set:
           - requested_slot:
+              - ticket_type
               - ticket_title
               - ticket_description
               - ticket_option
@@ -105,6 +99,7 @@ stories:
               - ticket_impact
               - ticket_environnement
       - slot_was_set:
+          - ticket_type: incident
           - ticket_title: "Title"
           - ticket_description: "Description"
           - ticket_emergency: "1"
@@ -115,16 +110,12 @@ stories:
       - active_loop: null
       - action: action_create_ticket
 
+#####################################################
   - story: create specific ticket path
     steps:
       - intent: greet
       - action: action_greet
       - intent: create_specific_ticket
-        entities:
-          - ticket_type: incident
-      - slot_was_set:
-          - ticket_type: incident
-      - action: action_create_f_step
       - action: ticket_form
       - active_loop: ticket_form
       - slot_was_set:
@@ -238,3 +229,9 @@ stories:
     #   - intent: user name
     #   - action: action_user_names
 
+  - story: give token path
+    steps:
+      - intent: greet
+      - action: action_greet
+      - intent: demand_token
+      - action: action_tell_token

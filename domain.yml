@@ -31,6 +31,7 @@ intents:
   - quit
   - ask_for_something
   - demand_parametre
+  - demand_token
 
 entities:
   - team_name
@@ -38,6 +39,7 @@ entities:
   - ticket_emergency
   - ticket_impact
   - ticket_environnement
+  - token
 
 slots:
   team_name:
@@ -98,7 +100,7 @@ slots:
     type: text
     mappings:
       - type: custom
-  is_description:
+  token:
     type: text
     mappings:
       - type: custom
@@ -106,6 +108,7 @@ slots:
 forms:
   ticket_form:
     required_slots:
+      - ticket_type
       - ticket_title
       - ticket_description
       - ticket_option
@@ -122,6 +125,7 @@ actions:
   - action_create_ticket
   - utter_next_step
   - utter_slot_values
+  - utter_ask_ticket_type
   - utter_ask_ticket_impact
   - utter_ask_ticket_emergency
   - utter_ask_ticket_description
@@ -144,8 +148,9 @@ actions:
   - action_explain_Champ_Option
   - action_explain_Champ_RGPD
   - action_explain_Champ_Environnement
-  # - validate_ticket_form
   - validate_ticket_form
+  - action_tell_token
+
 
 
 responses:
@@ -217,7 +222,7 @@ responses:
   # utter_iamabot_fr:
   #   - text: "Je suis un bot alimenté par Rasa."
 
-  utter_ask_type_ticket:
+  utter_ask_ticket_type:
     - text: "What type of ticket would you like to create?"
       buttons:
         - title: "Incident"
@@ -245,7 +250,7 @@ responses:
 
   utter_habilitation_client:
     - text: "Here is a table that demonstrate the client's habilitaton on EasyVista:"
-      image: "ressources/habilitationsClientEV.png"
+      image: "https://i.ibb.co/dJ3xM5c/habilitations-Client-EV.png"
 
   # utter_habilitation_client_fr:
   #   - text: "Voici un tableau qui montre l'habilitation du client sur EasyVista :"
@@ -303,18 +308,18 @@ responses:
     - text: "To create an incident on EasyVista you need to:"
   utter_step_creating_i_1:
     - text: "**1- Click on New ticket"
-      image: "ressources/step1.png"
+      image: "https://i.ibb.co/4740yzs/step1.png"
   utter_step_creating_i_2:
     - text: "**2- Declare the type incident"
-      image: "ressources/step2.png"
+      image: "https://i.ibb.co/RPJ1Ggj/step2.png"
   utter_step_creating_i_3:
     - text: "**3- Choose among the types of incidents to which your contract gives you access"
-      image: "ressources/step3.png"
+      image: "https://i.ibb.co/h1CKHfS/step3.png"
   utter_step_creating_i_4:
     - text: "**4- Click on 'Demande' to trigger its creation"
   utter_step_creating_i_5:
     - text: "**5- Complete a questionnaire to describe your incident, which will allow the Sopra Service Desk Banking to have the necessary information to work on your ticket"
-      image: "ressources/step4.png"
+      image: "https://i.ibb.co/JxB4YSb/step4.png"
   utter_step_creating_i_6:
     - text: "**! Mandatory fields are marked with a “ * ”."
   utter_step_creating_i_7:
@@ -325,7 +330,7 @@ responses:
     - text: "**6- Once the questionnaire is completed, click on 'OK', your incident is created and the support teams are informed"
   utter_step_creating_i_10:
     - text: "**! You can find your incident in your 'My Space / Tickets / Incidents' menu"
-      image: "ressources/step5.png"
+      image: "https://i.ibb.co/5WVgtjt/step5.png"
   ###############################################
 
   ##########demande de service steps################""
@@ -333,13 +338,13 @@ responses:
     - text: "To create a 'demande de service' on EasyVista you need to:"
   utter_step_creating_s_1:
     - text: "**1- Click on New ticket"
-      image: "ressources/step1.png"
+      image: "https://i.ibb.co/4740yzs/step1.png"
   utter_step_creating_s_2:
     - text: "**2- Demand a service"
-      image: "ressources/sstep1.png"
+      image: "https://i.ibb.co/mJH2K39/sstep1.png"
   utter_step_creating_s_3:
     - text: "**3- Choose among the service requests to which your contract gives you access"
-      image: "ressources/sstep2.png"
+      image: "https://i.ibb.co/cFqVYSQ/sstep2.png"
   utter_step_creating_s_4:
     - text: "**4- Click on 'Demande' to trigger its creation"
   utter_step_creating_s_5:
@@ -352,20 +357,20 @@ responses:
     - text: "**6- Once the questionnaire is completed, click on 'OK', your 'demande de service' is created and the support teams are informed"
   utter_step_creating_s_9:
     - text: "**! You can find your 'demande de service' in your 'My Space / Tickets / Demande de service' menu"
-      image: "ressources/sstep3.png"
+      image: "https://i.ibb.co/qpJWLCC/sstep3.png"
   ####################################################
   ##########demande de change steps################""
   utter_steps_creating_demande_de_change:
     - text: "To create a 'demande de change' on EasyVista you need to:"
   utter_step_creating_c_1:
     - text: "**1- Click on New ticket"
-      image: "ressources/step1.png"
+      image: "https://i.ibb.co/4740yzs/step1.png"
   utter_step_creating_c_2:
     - text: "**2- Demand a change"
-      image: "ressources/cstep1.png"
+      image: "https://i.ibb.co/VmZwX0p/cstep1.png"
   utter_step_creating_c_3:
     - text: "**3- Choose among the change requests to which your contract gives you access"
-      image: "ressources/cstep2.png"
+      image: "https://i.ibb.co/Ct4X7qN/cstep2.png"
   utter_step_creating_c_4:
     - text: "**4- Click on 'Demande' to trigger its creation"
   utter_step_creating_c_5:
@@ -378,7 +383,7 @@ responses:
     - text: "**6- Once the questionnaire is completed, click on 'OK', your 'demande de change' is created and the support teams are informed"
   utter_step_creating_c_9:
     - text: "**! You can find your 'demande de change' in your 'My Space / Tickets / Demande de changement' menu"
-      image: "ressources/cstep3.png"
+      image: "https://i.ibb.co/Kb4Zp14/cstep3.png"
   ################################################
 ###########Français########incident####################################
 
@@ -386,18 +391,18 @@ responses:
     - text: "Pour créer un incident sur EasyVista, vous devez :"
   utter_step_creating_i_1_fr:
     - text: "**1- Cliquer sur Nouveau ticket"
-      image: "ressources/step1.png"
+      image: "https://i.ibb.co/4740yzs/step1.png"
   utter_step_creating_i_2_fr:
     - text: "**2- Déclarer le type d'incident"
-      image: "ressources/step2.png"
+      image: "https://i.ibb.co/RPJ1Ggj/step2.png"
   utter_step_creating_i_3_fr:
     - text: "**3- Choisir parmi les types d'incidents auxquels votre contrat vous donne accès"
-      image: "ressources/step3.png"
+      image: "https://i.ibb.co/h1CKHfS/step3.png"
   utter_step_creating_i_4_fr:
     - text: "**4- Cliquer sur 'Demande' pour déclencher sa création"
   utter_step_creating_i_5_fr:
     - text: "**5- Compléter un questionnaire pour décrire votre incident, qui permettra au Sopra Service Desk Banking d'avoir les informations nécessaires pour travailler sur votre ticket"
-      image: "ressources/step4.png"
+      image: "https://i.ibb.co/JxB4YSb/step4.png"
   utter_step_creating_i_6_fr:
     - text: "**! Les champs obligatoires sont marqués d'un « * »."
   utter_step_creating_i_7_fr:
@@ -408,19 +413,19 @@ responses:
     - text: "**6- Une fois le questionnaire complété, cliquez sur 'OK', votre incident est créé et les équipes de support sont informées"
   utter_step_creating_i_10_fr:
     - text: "**! Vous pouvez trouver votre incident dans votre menu 'Mon espace / Tickets / Incidents'"
-      image: "ressources/step5.png"
+      image: "https://i.ibb.co/5WVgtjt/step5.png"
   ################service fr################################
   utter_steps_creating_demande_de_service_fr:
     - text: "Pour créer une 'demande de service' sur EasyVista, vous devez :"
   utter_step_creating_s_1_fr:
     - text: "**1- Cliquer sur Nouveau ticket"
-      image: "ressources/step1.png"
+      image: "https://i.ibb.co/4740yzs/step1.png"
   utter_step_creating_s_2_fr:
     - text: "**2- Demander un service"
-      image: "ressources/sstep1.png"
+      image: "https://i.ibb.co/mJH2K39/sstep1.png"
   utter_step_creating_s_3_fr:
     - text: "**3- Choisir parmi les demandes de service auxquelles votre contrat vous donne accès"
-      image: "ressources/sstep2.png"
+      image: "https://i.ibb.co/cFqVYSQ/sstep2.png"
   utter_step_creating_s_4_fr:
     - text: "**4- Cliquer sur 'Demande' pour déclencher sa création"
   utter_step_creating_s_5_fr:
@@ -433,19 +438,19 @@ responses:
     - text: "**6- Une fois le questionnaire rempli, cliquez sur 'OK', votre 'demande de service' est créée et les équipes de support en sont informées"
   utter_step_creating_s_9_fr:
     - text: "**! Vous pouvez trouver votre 'demande de service' dans votre menu 'Mon espace / Tickets / Demande de service'"
-      image: "ressources/sstep3.png"
+      image: "https://i.ibb.co/qpJWLCC/sstep3.png"
 ####################change fr################################
   utter_steps_creating_demande_de_change_fr:
     - text: "Pour créer une 'demande de changement' sur EasyVista, vous devez :"
   utter_step_creating_c_1_fr:
     - text: "**1- Cliquer sur 'Nouveau ticket'"
-      image: "ressources/step1.png"
+      image: "https://i.ibb.co/4740yzs/step1.png"
   utter_step_creating_c_2_fr:
     - text: "**2- Demander un changement"
-      image: "ressources/cstep1.png"
+      image: "https://i.ibb.co/VmZwX0p/cstep1.png"
   utter_step_creating_c_3_fr:
     - text: "**3- Choisir parmi les demandes de changement auxquelles votre contrat vous donne accès"
-      image: "ressources/cstep2.png"
+      image: "https://i.ibb.co/Ct4X7qN/cstep2.png"
   utter_step_creating_c_4_fr:
     - text: "**4- Cliquer sur 'Demande' pour déclencher sa création"
   utter_step_creating_c_5_fr:
@@ -458,7 +463,7 @@ responses:
     - text: "**6- Une fois le questionnaire rempli, cliquez sur 'OK', votre 'demande de changement' est créée et les équipes de support en sont informées."
   utter_step_creating_c_9_fr:
     - text: "**! Vous pouvez trouver votre 'demande de changement' dans votre menu 'Mon Espace / Tickets / Demande de changement'"
-      image: "ressources/cstep3.png"
+      image: "https://i.ibb.co/Kb4Zp14/cstep3.png"
   ###############################################################""""
   
   utter_explain_Champ_Product:
