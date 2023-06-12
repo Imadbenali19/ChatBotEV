@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>HelpBot</title>
+    <base href="/">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
+    <script src="https://use.fontawesome.com/544bd70e0b.js"></script>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+<!--    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">-->
+</head>
+<body>
+<app-root></app-root>
+
+<style>
+    /* Set the width and height of the conversation container */
+
+    .rw-conversation-container .rw-header{
+        height: 38px;
+        background: #41ace9;
+        border-radius: 10px 10px 0px 0px;
+        padding: 5px;
+
+    }
+
+    .rw-widget-container {
+        bottom: 45px;
+        display: flex;
+        flex-direction: column;
+        margin: 0 20px 20px 0;
+        position: fixed;
+        right: 0;
+        width: auto;
+        z-index: 9999;
+        align-items: flex-end;
+        justify-content: flex-end;
+    }
+    .rw-launcher{
+        background: #41ace9;
+    }
+    .rw-conversation-container{
+        width: 380px;
+        height: 480px;
+    }
+    .rw-conversation-container .rw-send .rw-send-icon-ready{
+        cursor: pointer;
+    }
+    .rw-conversation-container .rw-send .rw-send-icon-ready:hover{
+        fill:#41ace9;
+    }
+    .rw-conversation-container .rw-header .rw-avatar{
+        display: none;
+    }
+
+    .rw-conversation-container .rw-header .rw-title{
+        left: 19px;
+    }
+    .rw-conversation-container .rw-reply{
+        background-color:#efe7e3;
+        border: 1px solid #41ace9;
+        color: #000;
+    }
+    .rw-conversation-container .rw-reply:hover{
+        background-color:#41ace9;
+        color: #fff;
+    }
+    .rw-conversation-container .rw-response{
+        background-color: rgb(245, 245, 245);
+    }
+    .rw-conversation-container .rw-client{
+        background-color: #41ace9;
+    }
+
+</style>
+
+<div id="webchat"></div>
+
+
+<script>!(function () {
+    let e = document.createElement("script"),
+        t = document.head || document.getElementsByTagName("head")[0];
+    (e.src =
+        "https://cdn.jsdelivr.net/npm/rasa-webchat@1.0.1/lib/index.js"),
+        // Replace 1.x.x with the version that you want
+
+        (e.async = !0),
+        (e.onload = () => {
+			const tokenn="";
+			var token="clientTOKEN";
+			if(window.localStorage.getItem("HELPBOT")){
+				tokenn = window.localStorage.getItem("HELPBOT");
+				console.log("token : "+tokenn);
+                const myarray = tokenn.split(':"');
+                const myarr2 = myarray[1].split('"');
+                const desiredSubstring = myarr2[0];
+                console.log(desiredSubstring);
+                token = desiredSubstring;
+			}
+            
+//'/get_started{"token":"' + token + '"}'
+            window.WebChat.default(
+                {
+                    selector: "#webchat",
+                    initPayload:'/get_started{"token":"' + token + '"}',
+                    customData: { language: "en" },
+                    socketUrl: "http://localhost:5005",
+                    socketPath: "/socket.io/",
+                    title: "Helpbot",
+                    profileAvatar: 'https://i.ibb.co/z5F32fT/bot.jpg',
+                    storage: "local",
+                    showMessageDate: true,
+                    fullScreenMode: false,
+                    showFullScreenButton: true,
+                    onWidgetEvent: {
+                        onChatClose: () => {
+                            const result = window.confirm("Do you want to clear the chat's history?");
+                            if (result) {
+
+                                window.localStorage.removeItem('chat_session');
+                                window.location.reload();
+                                loadWebChat();
+                            } else {
+                                // perform action if user denies
+                                console.log("Denied");
+                            }
+                        },
+                        onChatOpen: () => {
+                            console.log("Chat opened");
+
+                        },
+                    },
+
+                    // params:{
+                    //   images: {
+                    //     dims: {
+                    //       width: 300,
+                    //       height: 200
+                    //     }
+                    //   }
+                    // }
+
+                },
+                null
+            );
+        }),
+        t.insertBefore(e, t.firstChild);
+})();
+// localStorage.clear();
+</script>
+
+<script>
+    function clearHistory(){
+        const result = window.confirm("Do you want to clear the chat's history?");
+        if (result) {
+            // perform action if user confirms
+            console.log("Confirmed");
+            // window.localStorage.removeItem('chat_session');
+            // window.location.reload();
+            localStorage.clear();
+            window.location.reload();
+        } else {
+            // perform action if user denies
+            console.log("Denied");
+        }
+    }
+
+</script>
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
+</body>
+</html>

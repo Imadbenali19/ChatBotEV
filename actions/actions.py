@@ -943,25 +943,33 @@ class ActionTellToken(Action):
         message = tracker.latest_message.get("text", "")
         print("message : ",message)
         
-        token_start_index = message.find('"token":"') + len('"token":"')
-        token_end_index = message.find('"', token_start_index)
-        token = message[token_start_index:token_end_index]
-        token_parts = token.split(':')
-        token_value = token_parts[0].strip("'")
+        if message!="clientTOKEN":
+            token_start_index = message.find('"token":"') + len('"token":"')
+            token_end_index = message.find('"', token_start_index)
+            token = message[token_start_index:token_end_index]
+            token_parts = token.split(':')
+            token_value = token_parts[0].strip("'")
+        else:
+            token_value="clientTOKEN"
+        
         print(token_value)
+
+        if token_value!="clientTOKEN":
+            # Decode the JWT token without verifying the secret key
+            decoded_token = jwt.decode(token_value, options={'verify_signature': False})
+            print("Payload : ",decoded_token)
+            userId=decoded_token['sub']
+            print("userId: ",userId)
+
+            username=decoded_token['username']
+            if "@" in username:
+                username = username.split("@")[0]
                 
-        # Decode the JWT token without verifying the secret key
-        decoded_token = jwt.decode(token_value, options={'verify_signature': False})
-
-        print("Payload : ",decoded_token)
-        userId=decoded_token['sub']
-        print("userId: ",userId)
-
-        username=decoded_token['username']
-        if "@" in username:
-            username = username.split("@")[0]
-            
-        print(username)
+            print(username)
+        else:
+            decoded_token="client"
+            username="client"
+        
         
         dispatcher.utter_message(response="utter_started", user = username)
     
@@ -1011,7 +1019,7 @@ class ValidateTicketForm(FormValidationAction):
         tfjKey = ["tfj","cbmaj600","cbmaj500","cbmaj540"]
         arreteKey = ["arretes de comptes","calcul des arretes","interets debiteurs","interets crediteurs","calcul des agios"]
         #Keywords for P1
-        p1key = ["plantage programme tfj","probleme tfj","plantage interface","blocage chaine tfj","blocage tfj"]
+        p1key = ["plantage programme tfj","probleme tfj","plantage interface","blocage chaine tfj","blocage tfj","blocage dans tfj"]
         ticket_option = None
         
         # Check if the description contains the keywords of caisse    
