@@ -96,14 +96,24 @@ slots:
     mappings:
       - type: from_entity
         entity: ticket_environnement
+  token:
+    type: text
+    mappings:
+      - type: from_entity
+        entity: token
+  userId:
+    type: text
+    mappings:
+      - type: custom
+  username:
+    type: text
+    mappings:
+      - type: custom
   user:
     type: text
     mappings:
       - type: custom
-  token:
-    type: text
-    mappings:
-      - type: custom
+    
 
 forms:
   ticket_form:
@@ -172,13 +182,7 @@ responses:
   #   - text: "De rien !"
 
   utter_started:
-    - condition:
-        - type: slot
-          name: user
-          value: "true"
-      text: "Hey, {user}! I'm EasyVista Bot. How can I assist you today?"
-
-    - text: "Hey, there! I'm EasyVista Bot. How can I assist you today?"
+    - text: "Hey, {user}! I'm EasyVista Bot. How can I assist you today?"
       buttons:
         - title: "Create ticket"
           payload: '/create_ticket'

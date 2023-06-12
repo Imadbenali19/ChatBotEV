@@ -12,10 +12,110 @@ rules:
       - intent: bot_challenge
       - action: action_iamabot
 
+  - rule: time say time
+    steps:
+      - intent: ask_time
+      - action: action_show_time
+
+  - rule: greet rule
+    steps:
+      - intent: greet
+      - action: action_greet
+
+  - rule: mood happy rule
+    steps:
+      - intent: mood_great
+      - action: action_happy
+
+  - rule: mood unhappy rule
+    steps:
+      - intent: mood_unhappy
+      - action: action_cheer_up
+      - action: action_did_that_help
+
+  - rule: affirm rule
+    steps:
+      - intent: affirm
+      - action: action_happy
+
+  - rule: deny rule
+    steps:
+      - intent: deny
+      - action: utter_goodbye
+
+  - rule: thank rule
+    steps:
+      - intent: thank
+      - action: action_thank
+
+  - rule: ask support teams rule
+    steps:
+      - intent: ask_support_team
+      - action: action_inform_support_teams
+
+  - rule: ask ticket type rule
+    steps:
+      - intent: ask_type_tickets
+      - action: action_inform_ticket_type
+  
+ 
+  - rule: ticket creation rule 
+    steps:
+      - intent: create_ticket
+      - action: ticket_form
+      - active_loop: ticket_form
+
+  - rule: specific ticket creation rule 
+    steps:
+      - intent: create_specific_ticket
+      - action: ticket_form
+      - active_loop: ticket_form
+
+  - rule: habilitations client demand rule 
+    steps:
+      - intent: habilitation_demand
+      - action: action_habilitation_client
+
+  - rule: incident creation steps rule 
+    steps:
+      - intent: askCreationIncidentSteps
+      - action: action_tell_steps_incident
+
+  - rule: demande de service creation steps rule 
+    steps:
+      - intent: askCreationDemandeDeServiceSteps
+      - action: action_tell_steps_demande_de_service
+
+  - rule: demande de changement creation steps rule 
+    steps:
+      - intent: askCreationDemandeDeChangetSteps
+      - action: action_tell_steps_demande_de_change
+
+  - rule: champ produit explain rule 
+    steps:
+      - intent: explainTicketProduct
+      - action: action_explain_Champ_Product
+
+  - rule: champ option explain rule 
+    steps:
+      - intent: explainTicketOption
+      - action: action_explain_Champ_Option
+
+  - rule: champ environnement explain rule 
+    steps:
+      - intent: explainTicketEnvironnement
+      - action: action_explain_Champ_Environnement
+
+  - rule: champ RGPD explain rule 
+    steps:
+      - intent: explainTicketRGPD
+      - action: action_explain_Champ_RGPD
+  
   - rule: Modules team
     steps:
       - intent: ask_modules_support_team
       - action: action_inform_module_support_teams
+  
   - rule: Ask the user to rephrase whenever they send a message with low NLU confidence
     steps:
       - intent: nlu_fallback

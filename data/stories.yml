@@ -12,6 +12,10 @@ stories:
   - story: get started path
     steps:
       - intent: get_started
+        entities:
+        - token: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIzIiwidXNlcm5hbWUiOiJjbGllbnQiLCJlbmFibGUiOnRydWUsImxvY2tlZCI6ZmFsc2UsInJvbGVzIjoiQ0xJRU5UIiwiZXhwIjoxNjg2MjE4MjkzLCJpYXQiOjE2ODYxMzE
+      - slot_was_set:
+        - token: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIzIiwidXNlcm5hbWUiOiJjbGllbnQiLCJlbmFibGUiOnRydWUsImxvY2tlZCI6ZmFsc2UsInJvbGVzIjoiQ0xJRU5UIiwiZXhwIjoxNjg2MjE4MjkzLCJpYXQiOjE2ODYxMzE
       - action: action_tell_token
 
   - story: something path

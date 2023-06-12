@@ -22,11 +22,11 @@ nlu:
 
   - intent: get_started
     examples: |
-      - i want help
-      - help
-      - aider
-      - j'ai besoin de l'aide
-      - aide
+      - i want help [eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIzIiwidXNlcm5hbWUiOiJjbGllbnQiLCJlbmFibGUiOnRydWUsImxvY2tlZCI6ZmFsc2UsInJvbGVzIjoiQ0xJRU5UIiwiZXhwIjoxNjg2MjE4MjkzLCJpYXQiOjE2ODYxMzE](token)
+      - help [eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIzIiwidXNlcm5hbWUiOiJjbGllbnQiLCJlbmFibGUiOnRydWUsImxvY2tlZCI6ZmFsc2UsInJvbGVzIjoiQ0xJRU5UIiwiZXhwIjoxNjg2MjE4MjkzLCJpYXQiOjE2ODYxMzE](token)
+      - aider [eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIzIiwidXNlcm5hbWUiOiJjbGllbnQiLCJlbmFibGUiOnRydWUsImxvY2tlZCI6ZmFsc2UsInJvbGVzIjoiQ0xJRU5UIiwiZXhwIjoxNjg2MjE4MjkzLCJpYXQiOjE2ODYxMzE](token)
+      - j'ai besoin de l'aide [eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIzIiwidXNlcm5hbWUiOiJjbGllbnQiLCJlbmFibGUiOnRydWUsImxvY2tlZCI6ZmFsc2UsInJvbGVzIjoiQ0xJRU5UIiwiZXhwIjoxNjg2MjE4MjkzLCJpYXQiOjE2ODYxMzE](token)
+      - aide [eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIzIiwidXNlcm5hbWUiOiJjbGllbnQiLCJlbmFibGUiOnRydWUsImxvY2tlZCI6ZmFsc2UsInJvbGVzIjoiQ0xJRU5UIiwiZXhwIjoxNjg2MjE4MjkzLCJpYXQiOjE2ODYxMzE](token)
 
   - intent: ask_for_something
     examples: |
@@ -38,7 +38,6 @@ nlu:
 
   - intent: goodbye
     examples: |
-      - cu
       - good by
       - cee you later
       - good night

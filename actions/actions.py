@@ -22,8 +22,7 @@ from spacy.language import Language
 
 from spacy_language_detection import LanguageDetector
 from googletrans import Translator
-
-import socketio
+import jwt
 
 translator = Translator()
 def get_lang_detector(nlp, name):
@@ -82,8 +81,10 @@ class ActionGreet(Action):
             dispatcher.utter_message(text=utter_text)
 
         token=tracker.get_slot("token")
+        username=tracker.get_slot("username")
+        userId=tracker.get_slot("userId")
 
-        print("hi your token  : ",token)
+        print("hi your token  : ",token," and username is : ",username, " and userId is : ",userId)
         return []
     
 class ActionHappy(Action):
@@ -367,7 +368,8 @@ class ActionInformModuleSupportTeams(Action):
         dispatcher.utter_message(text=f"{msg} **{team_name.upper()}** {msg2}: **{result}**")
         client.close()
         #return [SlotSet("module_team", result)]
-        return [AllSlotsReset()]
+        # return [AllSlotsReset()]
+        return [SlotSet("team_name", None)]
 
 class ActionInformTicketType(Action):
 
@@ -423,6 +425,8 @@ class ActionCreateTicket(Action):
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
 
+        print("create ticket class")
+
         def getPreviousDate(str):
             previous_date=str.split('_')[0][1:]
             return previous_date
@@ -452,6 +456,7 @@ class ActionCreateTicket(Action):
         # tickets_collection = db.tickets
 
         ticket_reference="I230417_111"
+        user_id=tracker.get_slot("userId")
         ticket_type=tracker.get_slot("ticket_type")
         ticket_title=tracker.get_slot("ticket_title")
         ticket_description=tracker.get_slot("ticket_description")
@@ -468,38 +473,14 @@ class ActionCreateTicket(Action):
         product="Amplitude v11.2"
         # environnement="Production"
         ticket_option=tracker.get_slot("ticket_option")
-        #mongodb
-        # ticket = {
-        #     "reference": ticket_reference,
-        #     "type": ticket_type,
-        #     "titre": ticket_title,
-        #     "description": ticket_description,
-        #     "emergency": ticket_emergency,
-        #     "impact": ticket_impact,
-        #     "priority": ticket_priority,
-        #     "product": product,
-        #     "bank_name": bank_name,
-        #     "option": ticket_option,
-        #     "environnement": environnement,
-        #     "status":"open",
-        #     "creation_date":dt.now(),
-        #     "closure_date":none,
-        #     "affected":'0',
-        #     "agentid":none,
-        #     "clientid":"supportTeam"
-
-        # }
-
-        # tickets_collection.insert_one(ticket)
-
-        # client.close()
+        
 
 
         # establish a connection to the MySQL database
         try:
             connection = pymysql.connect(
                 host='localhost',
-                database='helpbot',
+                database='helpboot',
                 user='root',
                 password=''
             )
@@ -517,13 +498,35 @@ class ActionCreateTicket(Action):
             ref_num_str = '{:04d}'.format(ref_num)
             ticket_reference=returnCode(ticket_type)+current_date+'_'+ref_num_str
 
+            #extract the client id from the jwt token
+            print("user id : ",user_id)
+            cursor = connection.cursor()
+            query = "SELECT id FROM client WHERE userid = %s;"
+            user_data = (user_id,)
+            cursor.execute(query, user_data)
+            resultId = cursor.fetchone()[0]
+
+            urgence=None
+            impact=None
+            if ticket_emergency=="1":
+                urgence='E'
+            elif ticket_emergency=="2":
+                urgence='M'
+            else:
+                urgence='F'
+            if ticket_impact=="1":
+                impact='E'
+            elif ticket_impact=="2":
+                impact='M'
+            else:
+                impact='F'
 
             # create a prepared statement for the SQL query
-            query = "INSERT INTO ticket (reference, type, title, description, emergency, impact, priority, product, bank_name, option, environnement, status, creation_date, closure_date, affected, agentid, clientid) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+            query = "INSERT INTO ticket (reference, type, title, description, emergency, impact, priority, module, environnement, status, creation_date, closure_date, affected, agentid, clientid) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
             cursor = connection.cursor()
 
             # insert the new ticket into the table
-            ticket_data = (ticket_reference, ticket_type, ticket_title, ticket_description, ticket_emergency, ticket_impact, ticket_priority, product, bank_name, ticket_option, ticket_environnement, 'open', dt.now(), None, b'\x00', None, None)
+            ticket_data = (ticket_reference, ticket_type, ticket_title, ticket_description, urgence, impact, ticket_priority, ticket_option, ticket_environnement, 'O', dt.now(), None, b'\x00', None, resultId)
             cursor.execute(query, ticket_data)
 
             # commit the changes to the database
@@ -543,12 +546,15 @@ class ActionCreateTicket(Action):
                 print("Error while closing MySQL connection:", e)
 
         created_suc="has been  created successfully !"
-        dispatcher.utter_message(text=f"Your Ticket {ticket_type} under {ticket_reference} : \n\n -*Title*: **{ticket_title}** \n\n -*Description*: **{ticket_description_str}** \n\n -*Emergency*: **{ticket_emergency}** \n\n -*Impact*: **{ticket_impact}** \n\n -*Priority*: **{ticket_priority}** \n\n -*Product*: **{product}** \n\n -*Client*: **{bank_name}** \n\n -*Beneficiaire*:  \n\n -*Product/Option*: **{product}/{ticket_option}** \n\n -*Version*:  \n\n -*Environnement*: **{ticket_environnement}** \n\n")
-        dispatcher.utter_message(text=f" **{created_suc}** \n\n")
-        dispatcher.utter_message(text=f"Your ticket's reference is **{ticket_reference}** \n\n")
+        # dispatcher.utter_message(text=f"Your Ticket {ticket_type} under {ticket_reference} : \n\n -*Title*: **{ticket_title}** \n\n -*Description*: **{ticket_description_str}** \n\n -*Emergency*: **{ticket_emergency}** \n\n -*Impact*: **{ticket_impact}** \n\n -*Priority*: **{ticket_priority}** \n\n -*Product*: **{product}** \n\n -*Client*: **{bank_name}** \n\n -*Beneficiaire*:  \n\n -*Product/Option*: **{product}/{ticket_option}** \n\n -*Version*:  \n\n -*Environnement*: **{ticket_environnement}** \n\n")
+        # dispatcher.utter_message(text=f" **{created_suc}** \n\n")
+        # dispatcher.utter_message(text=f"Your ticket's reference is **{ticket_reference}** \n\n")
+        dispatcher.utter_message(text=f"Your ticket {ticket_type}  **{created_suc}**, his reference is **{ticket_reference}** \n\n")
 
         #client.close()
-        return [AllSlotsReset()]
+        # return [AllSlotsReset()]
+        return [SlotSet("ticket_type", None), SlotSet("ticket_title", None), SlotSet("ticket_description", None), SlotSet("ticket_option", None), SlotSet("ticket_emergency", None), SlotSet("ticket_impact", None), SlotSet("ticket_environnement", None)]
+
 
 
 # class ActionTeamNames(Action):
@@ -936,17 +942,30 @@ class ActionTellToken(Action):
         
         message = tracker.latest_message.get("text", "")
         print("message : ",message)
+        
         token_start_index = message.find('"token":"') + len('"token":"')
         token_end_index = message.find('"', token_start_index)
         token = message[token_start_index:token_end_index]
         token_parts = token.split(':')
         token_value = token_parts[0].strip("'")
+        print(token_value)
+                
+        # Decode the JWT token without verifying the secret key
+        decoded_token = jwt.decode(token_value, options={'verify_signature': False})
 
-        print("JWT token : ",token_value)
+        print("Payload : ",decoded_token)
+        userId=decoded_token['sub']
+        print("userId: ",userId)
+
+        username=decoded_token['username']
+        if "@" in username:
+            username = username.split("@")[0]
+            
+        print(username)
         
-        dispatcher.utter_message(response="utter_started")
-
-        return [SlotSet("token", token_value)]
+        dispatcher.utter_message(response="utter_started", user = username)
+    
+        return [SlotSet("token", token), SlotSet("userId", userId), SlotSet("username", username)]
 
 
 class ValidateTicketForm(FormValidationAction):
@@ -985,20 +1004,20 @@ class ValidateTicketForm(FormValidationAction):
 
         description = slot_value.lower()  # Convert to lowercase for case-insensitive matching
         #keywords for the option
-        caisseKey = ["caisse", "billetage", "nomenclature 004","bkcaib","bkcai","nomenclature 095"]
+        caisseKey = ["caisse","caisses", "billetage", "nomenclature 004","bkcaib","bkcai","nomenclature 095"]
         parametrageKey = ["Nomenclature 098", "parametrage"]
         referentielKey = ["tiers", "clients","referentiels","gestionnaire","decisionnaire","niveau de forçage"]
         paymentKey = ["swift","cheques"]
         tfjKey = ["tfj","cbmaj600","cbmaj500","cbmaj540"]
         arreteKey = ["arretes de comptes","calcul des arretes","interets debiteurs","interets crediteurs","calcul des agios"]
         #Keywords for P1
-        p1key = ["plantage programme tfj","probleme tfj","plantage interface","blocage chaine tfj"]
+        p1key = ["plantage programme tfj","probleme tfj","plantage interface","blocage chaine tfj","blocage tfj"]
         ticket_option = None
         
         # Check if the description contains the keywords of caisse    
         if any(keyword in description for keyword in caisseKey):
             print("yes given caisse")
-            ticket_option = "Caisse"
+            ticket_option = "Guichet"
         elif any(keyword in description for keyword in parametrageKey):
             print("yes given parametrage")
             ticket_option = "Parametrage"

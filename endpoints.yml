@@ -17,7 +17,7 @@ cors:
     - /socket.io/
   allow_headers: "*"
   allow_origins:
-    - http://localhost:4200/
+    - http://localhost:8081/
   allow_credentials: true
 
 # Tracker store which is used to store the conversations.
