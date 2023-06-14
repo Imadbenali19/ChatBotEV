@@ -32,6 +32,10 @@ intents:
   - ask_for_something
   - demand_parametre
   - demand_token
+  - demand_ref_user
+  - plantage_cbmaj600
+  - dephasage_caisses
+  - demand_parametrage
 
 entities:
   - team_name
@@ -113,6 +117,10 @@ slots:
     type: text
     mappings:
       - type: custom
+  documentation_link:
+    type: text
+    mappings:
+      - type: custom
     
 
 forms:
@@ -160,6 +168,7 @@ actions:
   - action_explain_Champ_Environnement
   - validate_ticket_form
   - action_tell_token
+  - action_send_doc
 
 
 
@@ -182,17 +191,20 @@ responses:
   #   - text: "De rien !"
 
   utter_started:
-    - text: "Hey, {user}! I'm EasyVista Bot. How can I assist you today?"
+    - text: "Hey, **{user}**! I'm EasyVista Bot. How can I assist you today?"
       buttons:
         - title: "Create ticket"
           payload: '/create_ticket'
-        - title: "Demander un paramétrage"
-          payload: '/demand_parametre'
+        - title: "configuration parameters"
+          payload: '/demand_parametrage'
         - title: "Something else!"
           payload: '/ask_for_something'
 
   utter_ask_for_something:
     - text: "How can we help you?"
+
+  utter_documentation:
+    - text: "[Documentation]({documentation_link})"
     
   # utter_ask_for_something_fr:
   #   - text: "Est-ce que cela vous a aidé ?"
@@ -483,7 +495,30 @@ responses:
     - text: "RGPD '(GDPR in English)' stands for 'Réglement Général sur la Protection des Données, which is the French equivalent of GDPR (General Data Protection Regulation). It is a regulation that was adopted by the European Union in 2016 and became enforceable in 2018. The purpose of RGPD/GDPR is to strengthen and harmonize data protection laws across the EU."
 
   utter_please_rephrase:
-  - text: I'm sorry, I didn't quite understand that. Could you rephrase?
+  - text: I'm sorry, I didn't quite understand that. [Click here](google.com) to create a ticket in EasyVista or created via chatbot by create ticket message.
+  # - text: I'm sorry, I didn't quite understand that. Could you rephrase?
+
+  utter_cbmaj600_sol:
+  - text: " supprimer l'événement en erreur\n
+		        Requête pour identifier l'événement :\n 
+            SELECT *  FROM bkeve WHERE nat ='VENDEV'
+            AND ((mcai1 !=0 AND (cai1 IS NULL OR cai1 =' ')) 
+            OR (mcai2 !=0 AND (cai2 IS NULL OR cai2 =' ')) ou
+            OR (mcai3 !=0 AND (cai3 IS NULL OR cai3=' '))); "
+
+  utter_dephasage_sol:
+  - text: "Ajuster la caisse. Cela générera une erreur de caisse 
+		    Si la premiere n'est pas possible supprimer la caisse et la recréer
+		------->Procédure de la recréation 
+			delete from bkcai where age = <agence> and cai = <caisse>;
+			delete from bkcaib where age = <agence> and cai = <caisse>;    -- Uniquement si caisse soumise à billetage
+			update evuti set cao = ‘000’ where cuti = <uti>;   -- Uniquement dans le cas d’une caisse en devise national
+		Puis recréer la caisse via le gucrecais en utilisant le solde physique de la caisse.
+ "
+
+  utter_precise_parametre:
+  - text: "Which parameter? (referentiels users, accounts,098,...)"
+
 
 
 

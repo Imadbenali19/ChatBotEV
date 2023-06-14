@@ -202,7 +202,7 @@ class ActionThank(Action):
         # modify the response message
         utter_text = response_template_dict["text"]
         
-        if(language['language']=='fr'):
+        if(language['language']=='fr' or message.lower().startswith('merci') or message.lower().startswith('mrc')):
             translated_text = translator.translate(utter_text, dest='fr')
             dispatcher.utter_message(text=translated_text.text)
         else:
@@ -549,7 +549,7 @@ class ActionCreateTicket(Action):
         # dispatcher.utter_message(text=f"Your Ticket {ticket_type} under {ticket_reference} : \n\n -*Title*: **{ticket_title}** \n\n -*Description*: **{ticket_description_str}** \n\n -*Emergency*: **{ticket_emergency}** \n\n -*Impact*: **{ticket_impact}** \n\n -*Priority*: **{ticket_priority}** \n\n -*Product*: **{product}** \n\n -*Client*: **{bank_name}** \n\n -*Beneficiaire*:  \n\n -*Product/Option*: **{product}/{ticket_option}** \n\n -*Version*:  \n\n -*Environnement*: **{ticket_environnement}** \n\n")
         # dispatcher.utter_message(text=f" **{created_suc}** \n\n")
         # dispatcher.utter_message(text=f"Your ticket's reference is **{ticket_reference}** \n\n")
-        dispatcher.utter_message(text=f"Your ticket {ticket_type}  **{created_suc}**, his reference is **{ticket_reference}** \n\n")
+        dispatcher.utter_message(text=f"Your ticket {ticket_type}  **{created_suc}**, its reference is **{ticket_reference}** \n\n")
 
         #client.close()
         # return [AllSlotsReset()]
@@ -969,6 +969,7 @@ class ActionTellToken(Action):
         else:
             decoded_token="client"
             username="client"
+            userId="1"
         
         
         dispatcher.utter_message(response="utter_started", user = username)
@@ -1012,14 +1013,14 @@ class ValidateTicketForm(FormValidationAction):
 
         description = slot_value.lower()  # Convert to lowercase for case-insensitive matching
         #keywords for the option
-        caisseKey = ["caisse","caisses", "billetage", "nomenclature 004","bkcaib","bkcai","nomenclature 095"]
-        parametrageKey = ["Nomenclature 098", "parametrage"]
-        referentielKey = ["tiers", "clients","referentiels","gestionnaire","decisionnaire","niveau de forçage"]
+        caisseKey = ["caisse","caisses", "billetage", "nomenclature 004","bkcaib","bkcai","nomenclature 095", "cash position"]
+        parametrageKey = ["Nomenclature 098", "parametrage","configuration","code 098"]
+        referentielKey = ["tiers", "clients","referentiels","gestionnaire","decisionnaire","niveau de forçage","customer"]
         paymentKey = ["swift","cheques"]
         tfjKey = ["tfj","cbmaj600","cbmaj500","cbmaj540"]
         arreteKey = ["arretes de comptes","calcul des arretes","interets debiteurs","interets crediteurs","calcul des agios"]
         #Keywords for P1
-        p1key = ["plantage programme tfj","probleme tfj","plantage interface","blocage chaine tfj","blocage tfj","blocage dans tfj"]
+        p1key = ["plantage programme tfj","probleme tfj","plantage interface","blocage chaine tfj","blocage tfj","blocage dans tfj", "blocking of tfj", "crash of tfj program"]
         ticket_option = None
         
         # Check if the description contains the keywords of caisse    
@@ -1061,3 +1062,46 @@ class ValidateTicketForm(FormValidationAction):
             "ticket_impact": ticket_impact,
             "ticket_emergency": ticket_emergency
         }       
+    
+
+class ActionSendDoc(Action):
+
+    def name(self) -> Text:
+        return "action_send_doc"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        
+        message = tracker.latest_message.get("text", "")
+        print("message : ",message)
+
+        # Connect to MongoDB
+        client = MongoClient('mongodb+srv://imadsbsbenali:JEH0cHlnYaP2YpzB@cluster0.lcywgrn.mongodb.net/test?retryWrites=true&w=majority')
+        db = client.chatbotEVdb
+        collection = db.documentations
+
+        
+        if message.lower().find("referentiels users") != -1 or message.lower().find("referentiels utilisateurs") != -1:
+            doc = collection.find_one({'parametre': "referentiels users"})
+        elif message.lower().find("referentiels accounts") != -1 or message.lower().find("referentiels comptes") != -1:
+            doc = collection.find_one({'parametre': "referentiels comptes"})
+        elif message.lower().find("referentiels 098") != -1:
+            doc = collection.find_one({'parametre': "referentiels 098"})
+        elif message.lower().find("module caisses") != -1 or message.lower().find("module caisse") != -1:
+            doc = collection.find_one({'parametre': "module caisse"})
+        
+        file_id=doc['file_id']
+        # Google Drive file ID of the document
+        # file_id = "1R6cp81bJRIjmdN3PJtR8eU9t6QyJHo_S"
+        
+        # https://drive.google.com/uc?export=download&id=1R6cp81bJRIjmdN3PJtR8eU9t6QyJHo_S
+        # https://drive.google.com/file/d/1R6cp81bJRIjmdN3PJtR8eU9t6QyJHo_S/view?usp=drive_link
+        # Generate the link to open the document in the Google Docs Viewer
+        document_link = f"https://drive.google.com/uc?export=download&id={file_id}"
+        # document_link = f"https://drive.google.com/file/d/{file_id}/view?usp=drive_link"
+
+        # dispatcher.utter_message(text=f"Documentation: [document_link]")
+        dispatcher.utter_message(response="utter_documentation", documentation_link = document_link)
+
+        return []

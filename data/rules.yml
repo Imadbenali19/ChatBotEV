@@ -120,6 +120,26 @@ rules:
     steps:
       - intent: nlu_fallback
       - action: utter_please_rephrase
+  
+  - rule: give parameter rule
+    steps:
+      - intent: demand_parametre
+      - action: action_send_doc
+
+  - rule: give cbmaj600 sol rule
+    steps:
+      - intent: plantage_cbmaj600
+      - action: utter_cbmaj600_sol
+
+  - rule: give dephasage caisse sol rule
+    steps:
+      - intent: dephasage_caisses
+      - action: utter_dephasage_sol
+
+  - rule: demand parametrage rule
+    steps:
+      - intent: demand_parametrage
+      - action: utter_precise_parametre
 
   - rule: quit rule
     steps:

@@ -239,3 +239,23 @@ stories:
       - action: action_greet
       - intent: demand_token
       - action: action_tell_token
+
+  - story: send ref users docs path
+    steps:
+      - intent: demand_parametre
+      - action: action_send_doc
+
+  - story: give dephasage caisse sol path
+    steps:
+      - intent: dephasage_caisses
+      - action: utter_dephasage_sol
+
+  - story: give cbmaj600 blocage sol path
+    steps:
+      - intent: plantage_cbmaj600
+      - action: utter_cbmaj600_sol
+
+  - story: demand parametrage path
+    steps:
+      - intent: demand_parametrage
+      - action: utter_precise_parametre

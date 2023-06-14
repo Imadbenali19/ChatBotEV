@@ -60,6 +60,7 @@ nlu:
       - correct
       - vrai
       - oui
+      - bien
       - très bien
       - parfais!
       - d'accord
@@ -338,8 +339,23 @@ nlu:
 
   - intent: demand_parametre
     examples: |
-      - demand parametre 
+      - documentation referentiels users
+      - referentiels users
+      - documentation referentiels utilisateurs
+      - referentiels utilisateurs
+      - documentation referentiels comptes
+      - referentiels comptes
+      - documentation referentiels accounts
+      - referentiels accounts
+      - documentation referentiels 098
+      - referentiels 098
+      - documentation module caisses
+      - module caisses
+
+  - intent: demand_parametrage
+    examples: |
       - parametrage
+      - demand a parametrage
   
   
   
@@ -357,3 +373,13 @@ nlu:
     examples: |
       - demand token
       - token
+
+  - intent: plantage_cbmaj600
+    examples: |
+      - plantage du programme cbmaj600
+      - le programme cbmaj600 se bloque lors du tfj
+ 
+  - intent: dephasage_caisses
+    examples: |
+      - déphasage de caisse entre solde physique et solde informatique
+      - solde physique different de solde informatique
