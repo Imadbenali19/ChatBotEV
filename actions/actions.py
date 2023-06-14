@@ -36,20 +36,6 @@ nlp_model.add_pipe('language_detector', last=True)
 ###################
 
 
-#
-# class ActionHelloWorld(Action):
-
-#     def name(self) -> Text:
-#         return "action_hello_world"
-
-#     def run(self, dispatcher: CollectingDispatcher,
-#             tracker: Tracker,
-#             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-
-#         dispatcher.utter_message(text="Hello World!")
-
-#         return []
-
 class ActionGreet(Action):
 
     def name(self) -> Text:
@@ -446,14 +432,6 @@ class ActionCreateTicket(Action):
             else:
                 code="C"
             return code
-        # ticket_type = tracker.get_slot('ticket_type')
-        # if not ticket_type:
-        #     dispatcher.utter_message(text=f"I don't know your ticket type repeat again please!!")
-        #     return []
-
-        # client = MongoClient('mongodb+srv://imadsbsbenali:JEH0cHlnYaP2YpzB@cluster0.lcywgrn.mongodb.net/test?retryWrites=true&w=majority')
-        # db = client.chatbotEVdb
-        # tickets_collection = db.tickets
 
         ticket_reference="I230417_111"
         user_id=tracker.get_slot("userId")
@@ -467,10 +445,8 @@ class ActionCreateTicket(Action):
         priority = min(int(ticket_emergency) + int(ticket_impact) - 1, 4)
         ticket_priority = f"P{priority}"
         ####priority calcul#########
-        ticket_description_str = ticket_description[:100] + "..." if len(ticket_description) > 100 else ticket_description
-        bank_name="bank1"
-        # beneficiaire="b1"
-        product="Amplitude v11.2"
+        # ticket_description_str = ticket_description[:100] + "..." if len(ticket_description) > 100 else ticket_description
+       
         # environnement="Production"
         ticket_option=tracker.get_slot("ticket_option")
         
@@ -555,35 +531,6 @@ class ActionCreateTicket(Action):
         # return [AllSlotsReset()]
         return [SlotSet("ticket_type", None), SlotSet("ticket_title", None), SlotSet("ticket_description", None), SlotSet("ticket_option", None), SlotSet("ticket_emergency", None), SlotSet("ticket_impact", None), SlotSet("ticket_environnement", None)]
 
-
-
-# class ActionTeamNames(Action):
-
-#     def name(self) -> Text:
-#         return "action_team_names"
-
-
-#     def run(self, dispatcher: CollectingDispatcher,
-#             tracker: Tracker,
-#             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-
-#         # connect to the MongoDB database
-#         client = MongoClient('mongodb+srv://imadsbsbenali:JEH0cHlnYaP2YpzB@cluster0.lcywgrn.mongodb.net/test?retryWrites=true&w=majority')
-#         db = client.chatbotEVdb
-
-#         # retrieve the team names from the 'teamNames' collection
-#         team_names = []
-#         for team in db.teamNames.find():
-#             team_names.append(team['name'])
-
-#         # send the team names back to the user
-#         if len(team_names) > 0:
-#             message = "The team names are: " + ", ".join(team_names)
-#         else:
-#             message = "There are no team names available."
-#         dispatcher.utter_message(text=message)
-
-#         return []
 
 class ActionTellStepsIncident(Action):
 
@@ -735,44 +682,6 @@ class ActionCreateFirstStep(Action):
 
         return []
 
-# class ActionUserNames(Action):
-
-#     def name(self) -> Text:
-#         return "action_user_names"
-
-
-#     def run(self, dispatcher: CollectingDispatcher,
-#             tracker: Tracker,
-#             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-#         db = pymysql.connect(
-#             host="localhost",
-#             user="root",
-#             password="",
-#             database="dbusers"
-#         )
-#         try:
-#             # create a cursor object
-#             cursor = db.cursor()
-
-#             # execute a SQL query
-#             cursor.execute("SELECT * FROM users")
-
-#             # get the result
-#             result = cursor.fetchall()
-
-#             # process the result
-#             for row in result:
-#                 dispatcher.utter_message(text=f"Your Ticket {row} ")
-
-#         except Exception as e:
-#             # handle the exception
-#             print("Error:", e)
-
-#         finally:
-#             # close the connection
-#             db.close()
-
-#         return []
 
 class ActionHabilitationClient(Action):
 
@@ -1092,16 +1001,9 @@ class ActionSendDoc(Action):
             doc = collection.find_one({'parametre': "module caisse"})
         
         file_id=doc['file_id']
-        # Google Drive file ID of the document
-        # file_id = "1R6cp81bJRIjmdN3PJtR8eU9t6QyJHo_S"
-        
-        # https://drive.google.com/uc?export=download&id=1R6cp81bJRIjmdN3PJtR8eU9t6QyJHo_S
-        # https://drive.google.com/file/d/1R6cp81bJRIjmdN3PJtR8eU9t6QyJHo_S/view?usp=drive_link
-        # Generate the link to open the document in the Google Docs Viewer
+       
         document_link = f"https://drive.google.com/uc?export=download&id={file_id}"
-        # document_link = f"https://drive.google.com/file/d/{file_id}/view?usp=drive_link"
 
-        # dispatcher.utter_message(text=f"Documentation: [document_link]")
         dispatcher.utter_message(response="utter_documentation", documentation_link = document_link)
 
         return []
