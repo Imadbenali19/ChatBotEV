@@ -141,6 +141,11 @@ rules:
       - intent: demand_parametrage
       - action: utter_precise_parametre
 
+  - rule: demand ticket info rule
+    steps:
+      - intent: demand_ticket_state
+      - action: action_post_ticket_info
+
   - rule: quit rule
     steps:
       - intent: quit

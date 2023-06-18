@@ -1007,3 +1007,72 @@ class ActionSendDoc(Action):
         dispatcher.utter_message(response="utter_documentation", documentation_link = document_link)
 
         return []
+
+
+class ActionPostTicketInfo(Action):
+
+    def name(self) -> Text:
+        return "action_post_ticket_info"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        
+        
+        message = tracker.latest_message.get("text", "")
+        
+        msg_index = message.find('status of ') + len('status of ')
+        ref = message[msg_index:]
+        message= ref
+        print("message : ",message)
+
+        
+        user_id=tracker.get_slot("userId")
+        #connexion to db
+        try:
+            connection = pymysql.connect(
+                host='localhost',
+                database='helpboot',
+                user='root',
+                password=''
+            )
+
+            #extract the ticket
+            print("user id : ",user_id)
+            cursor = connection.cursor()
+            query = "SELECT t.id, t.status FROM ticket t JOIN client c ON c.id = t.clientid WHERE c.userid = %s  AND t.reference = %s;"
+            ticket_data = (user_id,message)
+            cursor.execute(query, ticket_data)
+            resultTicket = cursor.fetchone()
+
+            if resultTicket is not None:
+                t_id = resultTicket[0]
+                t_status = resultTicket[1]
+                print("Ticket ID:", t_id)
+                print("Status:", t_status)
+            else:
+                print("No ticket found.")
+                dispatcher.utter_message(text="No ticket found!")
+                return []
+            info_link = f"http://localhost:8081/pages/detailTicket;id={t_id}"
+            
+            if t_status== "O":
+                t_status="Open"
+            elif t_status== "T":
+                t_status="Taken/Processed"
+
+            dispatcher.utter_message(response="utter_info_ticket", t_id = t_id, t_status=t_status, info_link = info_link)
+
+        except Error as e:
+            print("Error while connecting to MySQL:", e)
+
+        finally:
+            # close the database connection
+            try:
+                cursor.close()
+                connection.close()
+                print("MySQL connection closed.")
+            except Error as e:
+                print("Error while closing MySQL connection:", e)
+
+        return []

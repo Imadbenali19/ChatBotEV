@@ -10,8 +10,6 @@
 <!--    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">-->
 </head>
 <body>
-    <!-- <iframe src="https://drive.google.com/file/d/1R6cp81bJRIjmdN3PJtR8eU9t6QyJHo_S/preview" width="100%" height="500px"></iframe> -->
-    
 <app-root></app-root>
 
 <style>
@@ -78,7 +76,9 @@
 <div id="webchat"></div>
 
 
-<script>!(function () {
+<script>
+    
+    !(function () {
     let e = document.createElement("script"),
         t = document.head || document.getElementsByTagName("head")[0];
     (e.src =
@@ -87,9 +87,11 @@
 
         (e.async = !0),
         (e.onload = () => {
-			const tokenn="";
+
+			var tokenn="";
 			var token="clientTOKEN";
 			if(window.localStorage.getItem("HELPBOT")){
+                console.log("yes token given");
 				tokenn = window.localStorage.getItem("HELPBOT");
 				console.log("token : "+tokenn);
                 const myarray = tokenn.split(':"');
@@ -98,7 +100,7 @@
                 console.log(desiredSubstring);
                 token = desiredSubstring;
 			}
-            
+
 //'/get_started{"token":"' + token + '"}'
             window.WebChat.default(
                 {
@@ -111,7 +113,6 @@
                     profileAvatar: 'https://i.ibb.co/z5F32fT/bot.jpg',
                     storage: "local",
                     showMessageDate: true,
-                    // docViewer: true,
                     fullScreenMode: false,
                     showFullScreenButton: true,
                     onWidgetEvent: {

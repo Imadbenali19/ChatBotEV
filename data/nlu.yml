@@ -383,3 +383,8 @@ nlu:
     examples: |
       - déphasage de caisse entre solde physique et solde informatique
       - solde physique different de solde informatique
+
+  - intent: demand_ticket_state
+    examples: |
+      - status of [I230514_0002](ticket_ref)
+      - status of [I230514_0003](ticket_ref)

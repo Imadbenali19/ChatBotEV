@@ -259,3 +259,8 @@ stories:
     steps:
       - intent: demand_parametrage
       - action: utter_precise_parametre
+
+  - story: demand ticket info path
+    steps:
+      - intent: demand_ticket_state
+      - action: action_post_ticket_info

@@ -36,6 +36,7 @@ intents:
   - plantage_cbmaj600
   - dephasage_caisses
   - demand_parametrage
+  - demand_ticket_state
 
 entities:
   - team_name
@@ -44,6 +45,7 @@ entities:
   - ticket_impact
   - ticket_environnement
   - token
+  - ticket_ref
 
 slots:
   team_name:
@@ -121,6 +123,23 @@ slots:
     type: text
     mappings:
       - type: custom
+  t_status:
+    type: text
+    mappings:
+      - type: custom
+  t_id:
+    type: text
+    mappings:
+      - type: custom
+  info_link:
+    type: text
+    mappings:
+      - type: custom
+  ticket_ref:
+    type: text
+    mappings:
+      - type: from_entity
+        entity: ticket_ref
     
 
 forms:
@@ -169,6 +188,7 @@ actions:
   - validate_ticket_form
   - action_tell_token
   - action_send_doc
+  - action_post_ticket_info
 
 
 
@@ -205,6 +225,9 @@ responses:
 
   utter_documentation:
     - text: "[Documentation]({documentation_link})"
+
+  utter_info_ticket:
+    - text: "Your ticket is **{t_status}**, for more details, click on [More...]({info_link})"
     
   # utter_ask_for_something_fr:
   #   - text: "Est-ce que cela vous a aidé ?"

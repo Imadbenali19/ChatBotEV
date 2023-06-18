@@ -1,10 +1,15 @@
-message = '/get_started{"token":"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIzIiwidXNlcm5hbWUiOiJjbGllbnQiLCJlbmFibGUiOnRydWUsImxvY2tlZCI6ZmFsc2UsInJvbGVzIjoiQ0xJRU5UIiwiZXhwIjoxNjg2MjExMzE2LCJpYXQiOjE2ODYxMjQ5MTZ9.Wos8_84kYt1jg4mRDJ8HoyU73uTC56_-CN-zl-rus39NWx9Xglz9p0KcNlFk3lc9hwRB0VP3XEEktB30JkNYpw"}'
-token_start_index = message.find('"token":"') + len('"token":"')
-token_end_index = message.find('"', token_start_index)
-token = message[token_start_index:token_end_index]
-token_parts = token.split(':')
-token_value = token_parts[0].strip("'")
-print(token_value)
+# message = '/get_started{"token":"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIzIiwidXNlcm5hbWUiOiJjbGllbnQiLCJlbmFibGUiOnRydWUsImxvY2tlZCI6ZmFsc2UsInJvbGVzIjoiQ0xJRU5UIiwiZXhwIjoxNjg2MjExMzE2LCJpYXQiOjE2ODYxMjQ5MTZ9.Wos8_84kYt1jg4mRDJ8HoyU73uTC56_-CN-zl-rus39NWx9Xglz9p0KcNlFk3lc9hwRB0VP3XEEktB30JkNYpw"}'
+# token_start_index = message.find('"token":"') + len('"token":"')
+# token_end_index = message.find('"', token_start_index)
+# token = message[token_start_index:token_end_index]
+# token_parts = token.split(':')
+# token_value = token_parts[0].strip("'")
+# print(token_value)
+
+message = "status of S230933_7343sdjfjsdf sidjfis"
+token_start_index = message.find('status of ') + len('status of ')
+token = message[token_start_index:]
+print(token)
 # import jwt
 
 # # Your JWT token value
